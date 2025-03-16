@@ -1,100 +1,142 @@
-import React from 'react';
+import React, { useRef, useState, useEffect } from "react";
 
 const Podcast = () => {
+  const audioRef = useRef(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+
+  const togglePlayPause = () => {
+    if (audioRef.current.paused) {
+      audioRef.current.play();
+      setIsPlaying(true);
+    } else {
+      audioRef.current.pause();
+      setIsPlaying(false);
+    }
+  };
+
+  const updateProgress = () => {
+    setCurrentTime(audioRef.current.currentTime);
+    setDuration(audioRef.current.duration);
+  };
+
+  const handleProgressClick = (e) => {
+    const progressBar = e.currentTarget;
+    const clickPosition = e.nativeEvent.offsetX;
+    const progressBarWidth = progressBar.clientWidth;
+    const seekTime = (clickPosition / progressBarWidth) * duration;
+    audioRef.current.currentTime = seekTime;
+  };
+
+  const formatTime = (time) => {
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+  };
+
+  useEffect(() => {
+    const audio = audioRef.current;
+
+    const handleTimeUpdate = () => {
+      updateProgress();
+    };
+
+    const handleLoadedMetadata = () => {
+      setDuration(audio.duration);
+    };
+
+    audio.addEventListener("timeupdate", handleTimeUpdate);
+    audio.addEventListener("loadedmetadata", handleLoadedMetadata);
+
+    return () => {
+      audio.removeEventListener("timeupdate", handleTimeUpdate);
+      audio.removeEventListener("loadedmetadata", handleLoadedMetadata);
+    };
+  }, []);
+
   return (
-    
-      <div className="bg-white p-8 rounded-lg shadow-md w-80">
-        {/* Album Cover */}
-        <img
-          src="https://telegra.ph/file/2acfcad8d39e49d95addd.jpg"
-          alt="idk - Highvyn, Taylor Shin"
-          className="w-64 h-64 mx-auto rounded-lg mb-4 shadow-lg shadow-teal-50"
-        />
+    <div id="podcasts" className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 ">
+      {/* Album Cover */}
+      <img
+        src="https://telegra.ph/file/2acfcad8d39e49d95addd.jpg"
+        alt="idk - Highvyn, Taylor Shin"
+        className="w-full h-48 object-cover rounded-lg mb-4"
+      />
 
-        {/* Song Title */}
-        <h2 className="text-xl font-semibold text-center">idk</h2>
+      {/* Song Title */}
+      <h2 className="text-xl font-semibold text-center">idk</h2>
 
-        {/* Artist Name */}
-        <p className="text-gray-600 text-sm text-center">Highvyn, Taylor Shin</p>
+      {/* Artist Name */}
+      <p className="text-gray-600 text-sm text-center mb-4">
+        Highvyn, Taylor Shin
+      </p>
 
-        {/* Music Controls */}
-        <div className="mt-6 flex justify-center items-center">
-          {/* Previous Button */}
-          <button className="p-3 rounded-full bg-gray-200 hover:bg-gray-300 focus:outline-none">
+      {/* Music Controls */}
+      <div className="flex justify-center items-center mb-4">
+        <button
+          onClick={togglePlayPause}
+          className="p-3 rounded-full bg-blue-500 hover:bg-blue-600 focus:outline-none transition-colors duration-300"
+        >
+          {isPlaying ? (
             <svg
-              width="64px"
-              height="64px"
-              viewBox="0 0 24 24"
-              className="w-4 h-4 text-gray-600"
-              fill="none"
               xmlns="http://www.w3.org/2000/svg"
-              transform="matrix(-1, 0, 0, 1, 0, 0)"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="white"
+              className="size-6"
             >
               <path
-                d="M16.6598 14.6474C18.4467 13.4935 18.4467 10.5065 16.6598 9.35258L5.87083 2.38548C4.13419 1.26402 2 2.72368 2 5.0329V18.9671C2 21.2763 4.13419 22.736 5.87083 21.6145L16.6598 14.6474Z"
-                fill="#000000"
-              ></path>
-              <path
-                d="M22.75 5C22.75 4.58579 22.4142 4.25 22 4.25C21.5858 4.25 21.25 4.58579 21.25 5V19C21.25 19.4142 21.5858 19.75 22 19.75C22.4142 19.75 22.75 19.4142 22.75 19V5Z"
-                fill="#000000"
-              ></path>
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M15.75 5.25v13.5m-7.5-13.5v13.5"
+              />
             </svg>
-          </button>
-
-          {/* Play/Pause Button */}
-          <button className="p-4 rounded-full bg-gray-200 hover:bg-gray-300 focus:outline-none mx-4">
+          ) : (
             <svg
-              width="64px"
-              height="64px"
-              viewBox="0 0 24 24"
-              className="w-6 h-6 text-gray-600"
+              className="w-6 h-6 text-white"
               fill="none"
+              stroke="currentColor"
+              viewBox="0 0 20 24"
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                d="M2 6C2 4.11438 2 3.17157 2.58579 2.58579C3.17157 2 4.11438 2 6 2C7.88562 2 8.82843 2 9.41421 2.58579C10 3.17157 10 4.11438 10 6V18C10 19.8856 10 20.8284 9.41421 21.4142C8.82843 22 7.88562 22 6 22C4.11438 22 3.17157 22 2.58579 21.4142C2 20.8284 2 19.8856 2 18V6Z"
-                fill="#000000"
-              ></path>
-              <path
-                d="M14 6C14 4.11438 14 3.17157 14.5858 2.58579C15.1716 2 16.1144 2 18 2C19.8856 2 20.8284 2 21.4142 2.58579C22 3.17157 22 4.11438 22 6V18C22 19.8856 22 20.8284 21.4142 21.4142C20.8284 22 19.8856 22 18 22C16.1144 22 15.1716 22 14.5858 21.4142C14 20.8284 14 19.8856 14 18V6Z"
-                fill="#000000"
-              ></path>
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M14.752 11.168l-6.56-3.84A1 1 0 006 8.32v7.36a1 1 0 001.192.98l6.56-3.84a1 1 0 000-1.696z"
+              />
             </svg>
-          </button>
-
-          {/* Next Button */}
-          <button className="p-3 rounded-full bg-gray-200 hover:bg-gray-300 focus:outline-none">
-            <svg
-              width="64px"
-              height="64px"
-              viewBox="0 0 24 24"
-              className="w-4 h-4 text-gray-600"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M16.6598 14.6474C18.4467 13.4935 18.4467 10.5065 16.6598 9.35258L5.87083 2.38548C4.13419 1.26402 2 2.72368 2 5.0329V18.9671C2 21.2763 4.13419 22.736 5.87083 21.6145L16.6598 14.6474Z"
-                fill="#000000"
-              ></path>
-              <path
-                d="M22.75 5C22.75 4.58579 22.4142 4.25 22 4.25C21.5858 4.25 21.25 4.58579 21.25 5V19C21.25 19.4142 21.5858 19.75 22 19.75C22.4142 19.75 22.75 19.4142 22.75 19V5Z"
-                fill="#000000"
-              ></path>
-            </svg>
-          </button>
-        </div>
-
-        {/* Progress Bar */}
-        <div className="mt-6 bg-gray-200 h-2 rounded-full">
-          <div className="bg-teal-500 h-2 rounded-full w-1/2"></div>
-        </div>
-
-        {/* Time Information */}
-        <div className="flex justify-between mt-2 text-sm text-gray-600">
-          <span>1:57</span>
-          <span>3:53</span>
-        </div>
+          )}
+        </button>
       </div>
+
+      {/* Progress Bar */}
+      <div
+        className="mt-4 bg-gray-200 h-2 rounded-full cursor-pointer"
+        onClick={handleProgressClick}
+      >
+        <div
+          className="bg-blue-500 h-2 rounded-full"
+          style={{ width: `${(currentTime / duration) * 100}%` }}
+        ></div>
+      </div>
+
+      {/* Time Information */}
+      <div className="flex justify-between mt-2 text-sm text-gray-600">
+        <span>{formatTime(currentTime)}</span>
+        <span>{formatTime(duration)}</span>
+      </div>
+
+      {/* Audio Element */}
+      <audio
+        ref={audioRef}
+        src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+      >
+        Your browser does not support the audio element.
+      </audio>
+    </div>
   );
 };
 
