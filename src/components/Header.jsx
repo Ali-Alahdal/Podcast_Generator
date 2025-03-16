@@ -49,28 +49,28 @@ const Header = () => {
             />
           </a>
 
-          <div className="flex items-center justify-center mt-6 text-gray-600 capitalize dark:text-gray-300">
+          <div className="flex items-center justify-center mt-6 text-gray-600 capitalize ">
             <a
               href="#main"
-              className="mx-2 text-gray-800 border-b-2 border-blue-500 dark:text-gray-200 sm:mx-6"
+              className="mx-2 text-gray-800 border-b-2 border-blue-500 "
             >
               الرئيسية
             </a>
             <a
               href="#podcasts"
-              className="mx-2 border-b-2 border-transparent hover:text-gray-800 dark:hover:text-gray-200 hover:border-blue-500 sm:mx-6"
+              className="mx-2 border-b-2 border-transparent hover:text-gray-800  hover:border-blue-500 sm:mx-6"
             >
               بودكاستات منشئة
             </a>
             <a
               href="#team"
-              className="mx-2 border-b-2 border-transparent hover:text-gray-800 dark:hover:text-gray-200 hover:border-blue-500 sm:mx-6"
+              className="mx-2 border-b-2 border-transparent hover:text-gray-800  hover:border-blue-500 sm:mx-6"
             >
               فريق العمل
             </a>
             <a
               href="#footer"
-              className="mx-2 border-b-2 border-transparent hover:text-gray-800 dark:hover:text-gray-200 hover:border-blue-500 sm:mx-6"
+              className="mx-2 border-b-2 border-transparent hover:text-gray-800  hover:border-blue-500 sm:mx-6"
             >
               معلومات التواصل
             </a>
