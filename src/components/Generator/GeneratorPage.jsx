@@ -6,7 +6,7 @@ const openai = new OpenAI({
   dangerouslyAllowBrowser: true,
 });
 
-// Generates a podcast transcript based on a topic and category.
+
 function generatePodcastTranscript(topic, category) {
   const wordRanges = {
     short: { min: 300, max: 400 },
