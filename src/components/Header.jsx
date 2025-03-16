@@ -2,8 +2,8 @@ import React from 'react';
 
 const Header = () => {
   return (
-    <header className="bg-white dark:bg-gray-900" dir="rtl">
-      <nav className="bg-white dark:bg-gray-900">
+    <header className="bg-white " dir="rtl">
+      <nav className="bg-white ">
         <div className="container flex flex-col items-center p-6 mx-auto">
           <a href="#" className="mx-auto">
             <img
@@ -13,28 +13,28 @@ const Header = () => {
             />
           </a>
 
-          <div className="flex items-center justify-center mt-6 text-gray-600 capitalize dark:text-gray-300">
+          <div className="flex items-center justify-center mt-6 text-gray-600 capitalize ">
             <a
               href="#main"
-              className="mx-2 text-gray-800 border-b-2 border-blue-500 dark:text-gray-200 sm:mx-6"
+              className="mx-2 text-gray-800 border-b-2 border-blue-500 "
             >
               الرئيسية
             </a>
             <a
               href="#podcasts"
-              className="mx-2 border-b-2 border-transparent hover:text-gray-800 dark:hover:text-gray-200 hover:border-blue-500 sm:mx-6"
+              className="mx-2 border-b-2 border-transparent hover:text-gray-800  hover:border-blue-500 sm:mx-6"
             >
               بودكاستات منشئة
             </a>
             <a
               href="#team"
-              className="mx-2 border-b-2 border-transparent hover:text-gray-800 dark:hover:text-gray-200 hover:border-blue-500 sm:mx-6"
+              className="mx-2 border-b-2 border-transparent hover:text-gray-800  hover:border-blue-500 sm:mx-6"
             >
               فريق العمل
             </a>
             <a
               href="#footer"
-              className="mx-2 border-b-2 border-transparent hover:text-gray-800 dark:hover:text-gray-200 hover:border-blue-500 sm:mx-6"
+              className="mx-2 border-b-2 border-transparent hover:text-gray-800  hover:border-blue-500 sm:mx-6"
             >
               معلومات التواصل
             </a>
@@ -54,10 +54,10 @@ const Header = () => {
           </div>
 
           <div className="max-w-lg lg:mx-12 lg:order-2">
-            <h1 className="text-3xl font-semibold tracking-wide text-gray-800 dark:text-white lg:text-4xl">
+            <h1 className="text-3xl font-semibold tracking-wide text-gray-800  lg:text-4xl">
               أفضل تطبيقات ساعة أبل
             </h1>
-            <p className="mt-4 text-gray-600 dark:text-gray-300">
+            <p className="mt-4 text-gray-600 ">
               لوريم إيبسوم هو نص نموذجي يستخدم في صناعة الطباعة والتنضيد. لوريم إيبسوم هو نص وهمي يستخدم في صناعة الطباعة والتنضيد.
             </p>
             <div className="mt-6">
