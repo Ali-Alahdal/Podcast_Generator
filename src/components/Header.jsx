@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import logo from "../assets/logo.png";
 
 
 const slides = [
@@ -10,17 +11,12 @@ const slides = [
   {
     title: "اصنع صوتك. أطلق قصتك. دع الذكاء الاصطناعي يقوم بالباقي!",
     text: "من الفكرة إلى البث – بودكاست احترافي بضغطة زر.",
-    image: "./src/assets/ai_podcast2.jpeg",
+    image: "./src/assets/aiWithMic.jpg",
   },
   {
     title: "لا تحتاج إلى مايك أو استوديو!",
     text: "كل ما تحتاجه هو فكرة، والباقي علينا. أنشئ بودكاستك الآن!",
-    image: "./src/assets/ai_podcast3.jpeg",
-  },
-  {
-    title: "المستقبل بين يديك: الذكاء الاصطناعي يروي قصتك!",
-    text: "اكتب، اختر صوتك، ودع الذكاء الاصطناعي يحوّل أفكارك إلى بودكاست رائع.",
-    image: "./src/assets/ai_podcast4.jpeg",
+    image: "./src/assets/micChip.jpg",
   },
 ];
 
@@ -43,11 +39,12 @@ const Header = () => {
   return (
     <header className="bg-white dark:bg-gray-900" dir="rtl">
       <nav className="bg-white dark:bg-gray-900">
-        <div className="container flex flex-col items-center p-6 mx-auto">
-          <a href="#" className="mx-auto">
+        <div className=" flex  items-center p-0 m-0 justify-center">
+          <p className="font-bold">بودكاست AI</p>
+          <a href="#" className="">
             <img
-              className="w-auto h-6 sm:h-7"
-              src="https://merakiui.com/images/full-logo.svg"
+              className="w-auto h-24"
+              src= {logo}
               alt="Logo"
             />
           </a>
@@ -109,7 +106,7 @@ const Header = () => {
               href="#"
               className="px-6 py-2.5 mt-6 text-sm font-medium leading-5 text-center text-white capitalize bg-blue-600 rounded-lg hover:bg-blue-500 lg:mx-0 lg:w-auto focus:outline-none"
             >
-              تنزيل من متجر التطبيقات
+              انشئ بودكاستك الآن!
             </a>
           </div>
         </div>
