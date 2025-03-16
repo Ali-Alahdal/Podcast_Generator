@@ -74,7 +74,7 @@ const Header = () => {
         <div className="flex items-center justify-center w-full h-96 lg:w-1/2">
           <img
             className="object-cover w-full h-full max-w-2xl rounded-md"
-            src="https://images.unsplash.com/photo-1579586337278-3befd40fd17a?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1352&q=80"
+            src="./src/assets/two_ai.jpeg"
             alt="apple watch"
           />
         </div>

@@ -34,7 +34,7 @@ const Footer = () => {
         {/* Copyright and Social Media Icons */}
         <div className="flex flex-col items-center sm:flex-row sm:justify-between">
           <p className="text-sm text-gray-500 dark:text-gray-300">
-            © Copyright 2021. All Rights Reserved.
+            © Copyright 2025. All Rights Reserved.
           </p>
 
           <div className="flex -mx-2">
