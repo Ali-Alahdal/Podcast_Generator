@@ -1,8 +1,10 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 function NewPodcast() {
   return (
-    <div className="bg-white cursor-pointer p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col gap-10 items-center justify-center">
+    
+    <Link to={"/new_podcast"} className="bg-white cursor-pointer p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col gap-10 items-center justify-center">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
@@ -16,7 +18,7 @@ function NewPodcast() {
         />
       </svg>
       <p>قم بتوليد بودكاستك الخاص والإستماع إلى مواضيع شيقة ومثيرة للإهتمام </p>
-    </div>
+    </Link>
   );
 }
 
