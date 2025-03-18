@@ -2,9 +2,9 @@ import React from "react";
 
 const TeamSection = () => {
   return (
-    <section id="team" className="bg-white dark:bg-gray-900   ">
+    <section id="team" className=" bg-[var(--bg-color)] m-5 border-[var(--primary-color)] rounded-lg  ">
       <div className="container px-6 py-10 mx-auto ">
-        <h1 className="text-2xl font-semibold text-center text-gray-800 capitalize lg:text-3xl dark:text-white">
+        <h1 className="text-2xl font-semibold text-center text-[var(--text-color)] capitalize lg:text-3xl dark:text-white">
           الفريق التنفيذي
         </h1>
 
@@ -12,25 +12,25 @@ const TeamSection = () => {
           
         </p>
 
-        <div className="flex items-center justify-between gap-32 ">
+        <div className="flex items-center justify-between gap-36 mt-20 ">
           {/* Team Member 1 */}
-          <div className="flex flex-col items-center p-8 transition-colors duration-300 transform group hover:bg-blue-600 rounded-xl">
+          <div className="flex flex-col items-center p-8 px-12 transition duration-800 transform group hover:bg-[var(--bg-color)] hover:shadow-lg  hover:shadow-[var(--secondary-color)] rounded-xl">
             <img
-              className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300"
+              className="object-cover w-32 h-32 rounded-full ring-4 ring-zinc-700 "
               src="./src/assets/ali.jpg"
               alt="ali alahdal"
             />
-            <h1 className="mt-4 text-2xl font-semibold text-gray-700 capitalize dark:text-white group-hover:text-white">
+            <h1 className="mt-4 text-2xl font-semibold text-[var(--text-color)] capitalize dark:text-white ">
               علي الأهدل
             </h1>
-            <p className="mt-2 text-gray-500 capitalize dark:text-gray-300 group-hover:text-gray-300">
+            <p className="mt-2 text-gray-500 capitalize dark:text-gray-300 ">
               مهندس فرونت إند
             </p>
             <div className="flex mt-3 -mx-2">
               
               <a
                 href="https://www.linkedin.com/in/ali-alahdal/"
-                className="mx-2 text-gray-600 dark:text-gray-300 hover:text-gray-500 dark:hover:text-gray-300 group-hover:text-white"
+                className="mx-2 text-[var(--text-color)] dark:text-gray-300 hover:text-gray-500 dark:hover:text-gray-300 group-hover:text-white"
                 aria-label="Linkedin"
               >
                 <svg
@@ -46,7 +46,7 @@ const TeamSection = () => {
               </a>
               <a
                 href="https://github.com/Ali-Alahdal"
-                className="mx-2 text-gray-600 dark:text-gray-300 hover:text-gray-500 dark:hover:text-gray-300 group-hover:text-white"
+                className="mx-2 text-[var(--text-color)] dark:text-gray-300 hover:text-gray-500 dark:hover:text-gray-300 group-hover:text-white"
                 aria-label="Github"
               >
                 <svg
@@ -63,16 +63,16 @@ const TeamSection = () => {
 
           
           {/* Team Member 2 */}
-          <div className="flex flex-col items-center p-8 transition-colors duration-300 transform group hover:bg-blue-600 rounded-xl">
+          <div className="flex flex-col items-center p-8 transition duration-800 transform group hover:shadow-lg hover:shadow-[var(--primary-color)] rounded-xl">
             <img
-              className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300"
+              className="object-cover w-32 h-32 rounded-full ring-4 ring-zinc-700"
               src="./src/assets/husam.jpg"
               alt="husam abdulraheem"
             />
-            <h1 className="mt-4 text-2xl font-semibold text-gray-700 capitalize dark:text-white group-hover:text-white">
+            <h1 className="mt-4 text-2xl font-semibold text-[var(--text-color)] capitalize dark:text-white ">
               حسام عبدالرحيم
             </h1>
-            <p className="mt-2 text-gray-500 capitalize dark:text-gray-300 group-hover:text-gray-300">
+            <p className="mt-2 text-gray-500 capitalize dark:text-gray-300 ">
               مهندس باك إند
             </p>
             <div className="flex -mx-2">
@@ -80,7 +80,7 @@ const TeamSection = () => {
                 
                 <a
                 href="www.linkedin.com/in/husam-abdulraheem-042785243"
-                className="mx-2 text-gray-600 dark:text-gray-300 hover:text-gray-500 dark:hover:text-gray-300 group-hover:text-white"
+                className="mx-2 text-[var(--text-color)] dark:text-gray-300 hover:text-gray-500 dark:hover:text-gray-300 group-hover:text-white"
                 aria-label="Linkedin"
               >
                 <svg
@@ -96,7 +96,7 @@ const TeamSection = () => {
               </a>
                 <a
                   href="https://github.com/Husam-Abdulraheem"
-                  className="mx-2 text-gray-600 dark:text-gray-300 hover:text-gray-500 dark:hover:text-gray-300 group-hover:text-white"
+                  className="mx-2 text-[var(--text-color)] dark:text-gray-300 hover:text-gray-500 dark:hover:text-gray-300 group-hover:text-white"
                   aria-label="Github"
                 >
                   <svg
@@ -113,16 +113,16 @@ const TeamSection = () => {
           </div>
 
           {/* Team Member 3 */}
-          <div className="flex flex-col items-center p-8 transition-colors duration-300 transform group hover:bg-blue-600 rounded-xl">
+          <div className="flex flex-col items-center p-8 px-10 transition duration-800 transform group hover:shadow-lg hover:shadow-[var(--primary-color)] rounded-xl">
             <img
-              className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300"
+              className="object-cover w-32 h-32 rounded-full ring-4 ring-zinc-700 "
               src="./src/assets/abdullah.jpg"
               alt="abdullah walidi"
             />
-            <h1 className="mt-4 text-2xl font-semibold text-gray-700 capitalize dark:text-white group-hover:text-white">
+            <h1 className="mt-4 text-2xl font-semibold text-[var(--text-color)] capitalize dark:text-white ">
               عبدالله الوليدي
             </h1>
-            <p className="mt-2 text-gray-500 capitalize dark:text-gray-300 group-hover:text-gray-300">
+            <p className="mt-2 text-gray-500 capitalize dark:text-gray-300 ">
                 مهندس فرونت إند
             </p>
             <div className="flex -mx-2">
@@ -130,7 +130,7 @@ const TeamSection = () => {
                 
               <a
                 href="https://www.linkedin.com/in/abdulla-al-walidi-3418b3343/"
-                className="mx-2 text-gray-600 dark:text-gray-300 hover:text-gray-500 dark:hover:text-gray-300 group-hover:text-white"
+                className="mx-2 text-[var(--text-color)] dark:text-gray-300 hover:text-gray-500 dark:hover:text-gray-300 group-hover:text-white"
                 aria-label="Linkedin"
               >
                 <svg
@@ -146,7 +146,7 @@ const TeamSection = () => {
               </a>
                 <a
                   href="https://github.com/AbdullaWalidi11"
-                  className="mx-2 cursor-pointer text-gray-600 dark:text-gray-300 hover:text-gray-500 dark:hover:text-gray-300 group-hover:text-white"
+                  className="mx-2 cursor-pointer text-[var(--text-color)] dark:text-gray-300 hover:text-gray-500 dark:hover:text-gray-300 group-hover:text-white"
                   aria-label="Github"
                 >
                   <svg

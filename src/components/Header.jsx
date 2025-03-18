@@ -37,10 +37,15 @@ const Header = () => {
 
 
   return (
-    <header className="bg-white dark:bg-gray-900" dir="rtl">
-      <nav className="bg-white dark:bg-gray-900">
-        <div className=" flex  items-center p-0 m-0 justify-center">
-          <p className="font-bold">بودكاست AI</p>
+    <header className="bg-[var(--bg-color)] text-[var(--text-color)]" dir="rtl">
+      <nav className="">
+        <div className=" flex  items-center p-0 m-0 justify-around">
+          <div className="flex items-center justify-center">
+          <div className="flex items-center justify-between gap-1">
+          <p className="font-bold">بودكاست</p>
+          <div className="bg-white h-5 w-[1px]"></div>
+          <p className="font-bold">AI</p>
+          </div>
           <a href="#" className="">
             <img
               className="w-auto h-24"
@@ -48,29 +53,30 @@ const Header = () => {
               alt="Logo"
             />
           </a>
+          </div>
 
           <div className="flex items-center justify-center mt-6 text-gray-600 capitalize ">
             <a
               href="#main"
-              className="mx-2 text-gray-800 border-b-2 border-blue-500 "
+              className="mx-2 text-[var(--text-color)] border-b-2 border-purple-600 "
             >
               الرئيسية
             </a>
             <a
               href="#podcasts"
-              className="mx-2 border-b-2 border-transparent hover:text-gray-800  hover:border-blue-500 sm:mx-6"
+              className="mx-2 text-[var(--text-color)] border-b-2 border-transparent hover:text-gray-100  hover:border-purple-600 sm:mx-6"
             >
               بودكاستات منشئة
             </a>
             <a
               href="#team"
-              className="mx-2 border-b-2 border-transparent hover:text-gray-800  hover:border-blue-500 sm:mx-6"
+              className="mx-2 text-[var(--text-color)] border-b-2 border-transparent hover:text-gray-100  hover:border-purple-600 sm:mx-6"
             >
               فريق العمل
             </a>
             <a
               href="#footer"
-              className="mx-2 border-b-2 border-transparent hover:text-gray-800  hover:border-blue-500 sm:mx-6"
+              className="mx-2 text-[var(--text-color)] border-b-2 border-transparent hover:text-gray-100  hover:border-purple-600 sm:mx-6"
             >
               معلومات التواصل
             </a>
@@ -87,7 +93,7 @@ const Header = () => {
             <button
               key={index}
               className={`w-3 h-3 mx-2 rounded-full lg:mx-0 focus:outline-none ${
-                index === currentIndex ? "bg-blue-500" : "bg-gray-300 hover:bg-blue-500"
+                index === currentIndex ? "bg-purple-600" : "bg-gray-300 hover:bg-purple-400"
               }`}
               onClick={() => setCurrentIndex(index)}
             ></button>
@@ -95,7 +101,7 @@ const Header = () => {
         </div>
 
         <div className="max-w-lg lg:mx-12 lg:order-2">
-          <h1 className="text-3xl font-semibold tracking-wide text-gray-800 dark:text-white lg:text-4xl">
+          <h1 className="text-3xl font-semibold tracking-wide text-[var(--text-color)] dark:text-white lg:text-4xl">
             {slides[currentIndex].title}
           </h1>
           <p className="mt-4 text-gray-600 dark:text-gray-300">
@@ -104,7 +110,7 @@ const Header = () => {
           <div className="mt-6">
             <a
               href="#"
-              className="px-6 py-2.5 mt-6 text-sm font-medium leading-5 text-center text-white capitalize bg-blue-600 rounded-lg hover:bg-blue-500 lg:mx-0 lg:w-auto focus:outline-none"
+              className="px-6 py-2.5 mt-6 text-sm font-medium leading-5 text-center text-white capitalize bg-gradient-to-b from-purple-800 to-purple-400 shadow-md shadow-purple-400 rounded-lg hover:shadow-md hover:shadow-purple-400  lg:mx-0 lg:w-auto focus:outline-none"
             >
               انشئ بودكاستك الآن!
             </a>
@@ -114,7 +120,7 @@ const Header = () => {
 
       <div className="flex items-center justify-center w-full h-96 lg:w-1/2">
         <img
-          className="object-cover w-full h-full max-w-2xl rounded-md transition-opacity duration-500"
+          className="object-cover w-full h-full max-w-2xl rounded-md border-2 transition duration-300 ease-in-out border-purple-700 hover:shadow-lg hover:shadow-purple-500 "
           src={slides[currentIndex].image}
           alt="Podcast AI"
         />
