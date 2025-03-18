@@ -8,6 +8,8 @@ import Footer from "./components/Footer";
 import { BrowserRouter , Routes , Route } from "react-router-dom";
 import GeneratorPage from "./components/Generator/GeneratorPage";
 
+
+
 function App() {
   return (
     <>

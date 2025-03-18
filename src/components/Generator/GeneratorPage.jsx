@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 import OpenAI from 'openai';
+import axios from 'axios';
 
 const openai = new OpenAI({
   apiKey: import.meta.env.VITE_API_KEY,
   dangerouslyAllowBrowser: true,
 });
 
-// Helper: Convert an AudioBuffer into a WAV Blob.
-function audioBufferToWav(buffer, opt) {
-  opt = opt || {};
+// ----------------- Audio Helpers -----------------
+
+function audioBufferToWav(buffer, opt = {}) {
   const numChannels = buffer.numberOfChannels;
   const sampleRate = buffer.sampleRate;
   const format = opt.float32 ? 3 : 1;
   const bitDepth = format === 3 ? 32 : 16;
-
   let result;
   if (numChannels === 2) {
     result = interleave(buffer.getChannelData(0), buffer.getChannelData(1));
@@ -26,8 +26,7 @@ function audioBufferToWav(buffer, opt) {
 function interleave(inputL, inputR) {
   const length = inputL.length + inputR.length;
   const result = new Float32Array(length);
-  let index = 0,
-    inputIndex = 0;
+  let index = 0, inputIndex = 0;
   while (index < length) {
     result[index++] = inputL[inputIndex];
     result[index++] = inputR[inputIndex];
@@ -41,7 +40,6 @@ function encodeWAV(samples, numChannels, sampleRate, bitDepth) {
   const blockAlign = numChannels * bytesPerSample;
   const buffer = new ArrayBuffer(44 + samples.length * bytesPerSample);
   const view = new DataView(buffer);
-
   writeString(view, 0, 'RIFF');
   view.setUint32(4, 36 + samples.length * bytesPerSample, true);
   writeString(view, 8, 'WAVE');
@@ -74,7 +72,6 @@ function floatTo16BitPCM(output, offset, input) {
   }
 }
 
-// Combine an array of AudioBuffers sequentially.
 async function combineAudioBuffers(buffers) {
   const totalDuration = buffers.reduce((acc, buffer) => acc + buffer.duration, 0);
   const sampleRate = buffers[0].sampleRate;
@@ -92,7 +89,8 @@ async function combineAudioBuffers(buffers) {
   return renderedBuffer;
 }
 
-// Randomly select two distinct voices (all in lowercase).
+// ----------------- Voice & Transcript Helpers -----------------
+
 function selectRandomVoices() {
   const voices = ["alloy", "ash", "coral", "echo", "fable", "onyx", "nova", "sage", "shimmer"];
   const hostVoice = voices[Math.floor(Math.random() * voices.length)];
@@ -103,7 +101,6 @@ function selectRandomVoices() {
   return { hostVoice, guestVoice };
 }
 
-// Generate audio for one line using OpenAI's TTS API.
 async function generateLineAudio(lineText, voice) {
   const response = await openai.audio.speech.create({
     model: "tts-1",
@@ -113,7 +110,6 @@ async function generateLineAudio(lineText, voice) {
   return response.arrayBuffer();
 }
 
-// Generate a podcast transcript using GPT‑4.
 async function generatePodcastTranscript(topic, category) {
   const wordRanges = {
     short: { min: 300, max: 400 },
@@ -122,12 +118,10 @@ async function generatePodcastTranscript(topic, category) {
   };
   const range = wordRanges[category] || wordRanges.short;
   const prompt = `Generate a podcast transcript discussing the topic "${topic}". The transcript should be a natural conversation between a host and a guest, labeled with "Host:" and "Guest:" at the start of their lines. It must include an engaging introduction, a dynamic discussion with questions and answers, and a clear ending that refers to our website "mypodcast". The entire transcript should be between ${range.min} and ${range.max} words. Do not include any stage directions or texts in square brackets.`;
-
   const messages = [
     { role: 'system', content: 'You are a creative podcast script generator.' },
     { role: 'user', content: prompt },
   ];
-
   const response = await openai.chat.completions.create({
     model: 'gpt-4',
     messages,
@@ -136,6 +130,49 @@ async function generatePodcastTranscript(topic, category) {
   });
   return response.choices[0].message.content;
 }
+
+// ----------------- Image Generation Helpers -----------------
+
+async function generateImagePrompt(topic) {
+  const prompt = `Generate a creative and appealing image prompt for a podcast cover about "${topic}". The prompt should evoke modern, artistic, and visually striking imagery suitable for a podcast cover. Include stylistic details such as color scheme, mood, and art style.`;
+  const messages = [
+    { role: 'system', content: 'You are a creative image prompt generator.' },
+    { role: 'user', content: prompt },
+  ];
+  const response = await openai.chat.completions.create({
+    model: 'gpt-4',
+    messages,
+    max_tokens: 100,
+    temperature: 0.8,
+  });
+  return response.choices[0].message.content;
+}
+
+async function generatePodcastImage(imagePrompt) {
+  const options = {
+    method: 'POST',
+    url: 'https://api.starryai.com/creations/',
+    headers: {
+      accept: 'application/json',
+      'content-type': 'application/json',
+      'X-API-Key': import.meta.env.VITE_STARRYAI_API_KEY
+    },
+    data:  {
+      model: 'lyra',
+      aspectRatio: 'square',
+      highResolution: false,
+      images: 1,
+      steps: 20,
+      initialImageMode: 'color',
+      prompt: imagePrompt
+    }
+  };
+
+  const response = await axios.request(options);
+  return response.data.imageUrls[0];
+}
+
+
 
 function PodcastGenerator() {
   const [topic, setTopic] = useState('');
@@ -147,8 +184,9 @@ function PodcastGenerator() {
   const [jsonUrl, setJsonUrl] = useState(null);
   const [hostVoice, setHostVoice] = useState(null);
   const [guestVoice, setGuestVoice] = useState(null);
+  const [imageUrl, setImageUrl] = useState(null);
+  const [loadingImage, setLoadingImage] = useState(false);
 
-  // Generate transcript and select voices.
   const handleGenerateTranscript = async (e) => {
     e.preventDefault();
     setLoadingTranscript(true);
@@ -165,8 +203,6 @@ function PodcastGenerator() {
       };
       const jsonBlob = new Blob([JSON.stringify(metadata, null, 2)], { type: 'application/json' });
       setJsonUrl(URL.createObjectURL(jsonBlob));
-
-      // Randomly select voices for host and guest.
       const voices = selectRandomVoices();
       setHostVoice(voices.hostVoice);
       setGuestVoice(voices.guestVoice);
@@ -176,7 +212,6 @@ function PodcastGenerator() {
     setLoadingTranscript(false);
   };
 
-  // Handle file upload of transcript JSON.
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -186,9 +221,18 @@ function PodcastGenerator() {
         const jsonData = JSON.parse(event.target.result);
         if (jsonData.transcript) {
           setTranscript(jsonData.transcript);
+          if (jsonData.topic) {
+            setTopic(jsonData.topic);
+          }
           const voices = selectRandomVoices();
           setHostVoice(voices.hostVoice);
           setGuestVoice(voices.guestVoice);
+          // Automatically generate image if topic is available
+          if (jsonData.topic) {
+            setTimeout(() => {
+              handleGenerateImage();
+            }, 100);
+          }
         } else {
           console.error('Uploaded JSON does not contain a transcript property.');
         }
@@ -199,7 +243,6 @@ function PodcastGenerator() {
     reader.readAsText(file);
   };
 
-  // Generate audio for each transcript line using the chosen voices.
   const handleGenerateAudio = async () => {
     if (!transcript) return;
     setLoadingAudio(true);
@@ -207,7 +250,6 @@ function PodcastGenerator() {
       const lines = transcript.split('\n').filter(line => line.trim() !== '');
       const audioBuffers = [];
       const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-
       for (const line of lines) {
         let speaker = null;
         let text = line;
@@ -218,18 +260,16 @@ function PodcastGenerator() {
           speaker = 'guest';
           text = line.replace(/^Guest\s*:\s*/i, '');
         } else {
-          speaker = 'host'; // default to host
+          speaker = 'host';
         }
         text = text.trim();
         if (!/[.!?]$/.test(text)) text += '.';
-
         const chosenVoice = speaker === 'host' ? hostVoice : guestVoice;
-        console.log(`Generating audio for speaker: ${speaker}, voice: ${chosenVoice}, text: "${text}"`);
+        console.log(`Generating audio for ${speaker} (voice: ${chosenVoice}): "${text}"`);
         const arrayBuffer = await generateLineAudio(text, chosenVoice);
         const decodedBuffer = await audioContext.decodeAudioData(arrayBuffer.slice(0));
         audioBuffers.push(decodedBuffer);
       }
-
       const combinedBuffer = await combineAudioBuffers(audioBuffers);
       const wavBlob = audioBufferToWav(combinedBuffer);
       setCombinedAudioUrl(URL.createObjectURL(wavBlob));
@@ -237,6 +277,20 @@ function PodcastGenerator() {
       console.error('Error generating audio:', error);
     }
     setLoadingAudio(false);
+  };
+
+  const handleGenerateImage = async () => {
+    if (!topic) return;
+    setLoadingImage(true);
+    try {
+      const imgPrompt = await generateImagePrompt(topic);
+      console.log("Generated image prompt:", imgPrompt);
+      const imgUrl = await generatePodcastImage(imgPrompt);
+      setImageUrl(imgUrl);
+    } catch (error) {
+      console.error("Error generating podcast image:", error);
+    }
+    setLoadingImage(false);
   };
 
   return (
@@ -303,6 +357,24 @@ function PodcastGenerator() {
           </a>
         </div>
       )}
+
+      <div style={{ marginTop: '2rem' }}>
+        <button onClick={handleGenerateImage} style={{ padding: '0.5rem' }} disabled={loadingImage}>
+          {loadingImage ? 'Generating Image...' : 'Generate Podcast Cover Image'}
+        </button>
+        {imageUrl && (
+          <div style={{ marginTop: '1rem' }}>
+            <img src={imageUrl} alt="Podcast Cover" style={{ maxWidth: '100%', height: 'auto' }} />
+            <a
+              href={imageUrl}
+              download="podcast_cover.jpg"
+              style={{ display: 'block', marginTop: '0.5rem' }}
+            >
+              Download Podcast Cover Image
+            </a>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
