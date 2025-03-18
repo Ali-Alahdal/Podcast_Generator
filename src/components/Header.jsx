@@ -37,8 +37,8 @@ const Header = () => {
 
 
   return (
-    <header className="bg-white dark:bg-gray-900" dir="rtl">
-      <nav className="bg-white dark:bg-gray-900">
+    <header className="bg-white " dir="rtl">
+      <nav className="bg-white ">
         <div className=" flex  items-center p-0 m-0 justify-center">
           <p className="font-bold">بودكاست AI</p>
           <a href="#" className="">
@@ -95,10 +95,10 @@ const Header = () => {
         </div>
 
         <div className="max-w-lg lg:mx-12 lg:order-2">
-          <h1 className="text-3xl font-semibold tracking-wide text-gray-800 dark:text-white lg:text-4xl">
+          <h1 className="text-3xl font-semibold tracking-wide text-gray-800  lg:text-4xl">
             {slides[currentIndex].title}
           </h1>
-          <p className="mt-4 text-gray-600 dark:text-gray-300">
+          <p className="mt-4 text-gray-600 ">
             {slides[currentIndex].text}
           </p>
           <div className="mt-6">
