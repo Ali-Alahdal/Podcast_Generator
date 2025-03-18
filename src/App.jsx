@@ -6,7 +6,8 @@ import NewPodcast from "./components/newPodcast";
 import TeamSection from "./components/TeamSection";
 import Footer from "./components/Footer";
 import { BrowserRouter , Routes , Route } from "react-router-dom";
-import GeneratorPage from "./components/Generator/GeneratorPage";
+import TempContainer from "./components/Generator/TempContainer";
+// import GeneratorPage from "./components/Generator/GeneratorPage";
 
 
 
@@ -19,7 +20,7 @@ function App() {
             <Route index path={"/"} element={
               <>
                 <Header />
-                <div className="text-3xl font-bold text-right py-10 px-6   ">
+                <div className="text-3xl font-bold text-right py-10 px-6 bg-[var(--primary-color)] rounded-xl   ">
                   قائمة البودكاست
                 </div>
                 <div  className="container mx-auto  flex flex-col items-center">
@@ -35,7 +36,7 @@ function App() {
             } />
 
 
-          <Route path={"/new_podcast"} element={<GeneratorPage />} />
+           <Route path={"/new_podcast"} element={<TempContainer />} />
         </Routes>
      
       
