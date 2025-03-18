@@ -9,6 +9,8 @@ import { BrowserRouter , Routes , Route } from "react-router-dom";
 import TempContainer from "./components/Generator/TempContainer";
 // import GeneratorPage from "./components/Generator/GeneratorPage";
 
+
+
 function App() {
   return (
     <>
