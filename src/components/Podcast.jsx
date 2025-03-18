@@ -56,7 +56,7 @@ const Podcast = () => {
   }, []);
 
   return (
-    <div id="podcasts" className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 ">
+    <div id="" className="bg-[var(--bg-color)] border-2  border-[var(--secondary-color)] hover:border-purple-400 cursor-pointer p-6  shadow-lg hover:shadow-sm hover:shadow-purple-400 rounded-lg    transition-shadow duration-300 ">
       {/* Album Cover */}
       <img
         src="https://telegra.ph/file/2acfcad8d39e49d95addd.jpg"
@@ -76,7 +76,7 @@ const Podcast = () => {
       <div className="flex justify-center items-center mb-4">
         <button
           onClick={togglePlayPause}
-          className="p-3 rounded-full bg-blue-500 hover:bg-blue-600 focus:outline-none transition-colors duration-300"
+          className="p-3 rounded-full bg-[var(--primary-color)] hover:bg-[var(--secondary-color)] focus:outline-none transition-colors duration-300"
         >
           {isPlaying ? (
             <svg
@@ -118,7 +118,7 @@ const Podcast = () => {
         onClick={handleProgressClick}
       >
         <div
-          className="bg-blue-500 h-2 rounded-full"
+          className="bg-[var(--primary-color)] h-2 rounded-full"
           style={{ width: `${(currentTime / duration) * 100}%` }}
         ></div>
       </div>

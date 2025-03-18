@@ -3,13 +3,13 @@ import Logo from "../assets/logo.png";
 
 const Footer = () => {
   return (
-    <footer id="footer" className="bg-white dark:bg-gray-900 w-full">
+    <footer id="footer" className="bg-[var(--bg-color)] dark:bg-gray-900 w-full">
       <div className="container px-6 py-8 mx-auto">
         {/* Logo and Navigation Links */}
         <div className="flex flex-col items-center text-center">
           <a
             href="#"
-            className="font-bold text-gray-800 dark:text-gray-200"
+            className="font-bold text-[var(--text-color)] dark:text-gray-200"
           >
             <img src={Logo} className="w-auto h-24" alt="" />
             بودكاست AI
@@ -20,7 +20,7 @@ const Footer = () => {
               <a
                 key={index}
                 href="#"
-                className="mx-4 text-sm text-gray-600 transition-colors duration-300 hover:text-blue-500 dark:text-gray-300 dark:hover:text-blue-400"
+                className="mx-4 text-sm text-gray-600 transition-colors duration-300 hover:text-[var(--secondary-color)] dark:text-gray-300 dark:hover:text-blue-400"
                 aria-label={link}
               >
                 {link}
