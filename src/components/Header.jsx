@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import logo from "../assets/logo.png";
+import { Link } from "react-router-dom";
 
 
 const slides = [
@@ -48,21 +49,19 @@ const Header = () => {
         <div className=" flex  items-center p-0 m-0 justify-around">
           <div className="flex items-center justify-center">
           <div className="flex items-center justify-between gap-1">
-          <p className="font-bold">بودكاست</p>
-          <div className="bg-white h-5 w-[1px]"></div>
-          <p className="font-bold">AI</p>
+          
           </div>
 >>>>>>> d7dfde70ea12cf9e4b53c006c62f5dc2c468ff13
           <a href="#" className="">
             <img
-              className="w-auto h-24"
+              className="w-auto h-28"
               src= {logo}
               alt="Logo"
             />
           </a>
           </div>
 
-          <div className="flex items-center justify-center mt-6 text-gray-600 capitalize ">
+          <div className="flex items-center justify-center  text-gray-600 capitalize ">
             <a
               href="#main"
               className="mx-2 text-[var(--text-color)] border-b-2 border-purple-600 "
@@ -119,12 +118,12 @@ const Header = () => {
             {slides[currentIndex].text}
           </p>
           <div className="mt-6">
-            <a
-              href="#"
+            <Link
+              to={"/new_podcast"}
               className="px-6 py-2.5 mt-6 text-sm font-medium leading-5 text-center text-white capitalize bg-gradient-to-b from-purple-800 to-purple-400 shadow-md shadow-purple-400 rounded-lg hover:shadow-md hover:shadow-purple-400  lg:mx-0 lg:w-auto focus:outline-none"
             >
               انشئ بودكاستك الآن!
-            </a>
+            </Link>
           </div>
         </div>
       </div>

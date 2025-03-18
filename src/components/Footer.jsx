@@ -12,7 +12,7 @@ const Footer = () => {
             className="font-bold text-[var(--text-color)] dark:text-gray-200"
           >
             <img src={Logo} className="w-auto h-24" alt="" />
-            بودكاست AI
+          
           </a>
 
           <div className="flex flex-wrap justify-center mt-6 -mx-4">
