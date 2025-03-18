@@ -2,7 +2,7 @@ import React from "react";
 import "./App.css";
 import Header from "./components/Header";
 import Podcast from "./components/Podcast";
-import NewPodcast from "./components/newPodcast";
+import NewPodcast from "./components/NewPodcast";
 import TeamSection from "./components/TeamSection";
 import Footer from "./components/Footer";
 import { BrowserRouter , Routes , Route } from "react-router-dom";
@@ -20,7 +20,7 @@ function App() {
             <Route index path={"/"} element={
               <>
                 <Header />
-                <div className="text-3xl font-bold text-right py-10 px-6 bg-[var(--primary-color)] rounded-xl   ">
+                <div className="text-3xl font-bold text-right py-10 px-20 text-purple-300 rounded-xl   ">
                   قائمة البودكاست
                 </div>
                 <div  className="container mx-auto  flex flex-col items-center">
