@@ -38,12 +38,6 @@ const Header = () => {
 
 
   return (
-<<<<<<< HEAD
-    <header className="bg-white " dir="rtl">
-      <nav className="bg-white ">
-        <div className=" flex  items-center p-0 m-0 justify-center">
-          <p className="font-bold">بودكاست AI</p>
-=======
     <header className="bg-[var(--bg-color)] text-[var(--text-color)]" dir="rtl">
       <nav className="">
         <div className=" flex  items-center p-0 m-0 justify-around">
@@ -51,7 +45,6 @@ const Header = () => {
           <div className="flex items-center justify-between gap-1">
           
           </div>
->>>>>>> d7dfde70ea12cf9e4b53c006c62f5dc2c468ff13
           <a href="#" className="">
             <img
               className="w-auto h-28"
@@ -107,34 +100,33 @@ const Header = () => {
         </div>
 
         <div className="max-w-lg lg:mx-12 lg:order-2">
-<<<<<<< HEAD
-          <h1 className="text-3xl font-semibold tracking-wide text-gray-800  lg:text-4xl">
-=======
           <h1 className="text-3xl font-semibold tracking-wide text-[var(--text-color)] dark:text-white lg:text-4xl">
->>>>>>> d7dfde70ea12cf9e4b53c006c62f5dc2c468ff13
             {slides[currentIndex].title}
           </h1>
           <p className="mt-4 text-gray-600 ">
             {slides[currentIndex].text}
           </p>
           <div className="mt-6">
-            <Link
-              to={"/new_podcast"}
-              className="px-6 py-2.5 mt-6 text-sm font-medium leading-5 text-center text-white capitalize bg-gradient-to-b from-purple-800 to-purple-400 shadow-md shadow-purple-400 rounded-lg hover:shadow-md hover:shadow-purple-400  lg:mx-0 lg:w-auto focus:outline-none"
-            >
-              انشئ بودكاستك الآن!
-            </Link>
+          <Link
+  to="/new_podcast"
+  className="px-6 py-3 mt-6 text-sm font-semibold text-center text-white bg-gradient-to-r from-purple-700 via-purple-500 to-purple-400 rounded-xl shadow-lg transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-purple-500/50 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2"
+>
+  انشئ بودكاستك الآن!
+</Link>
+
           </div>
         </div>
       </div>
 
       <div className="flex items-center justify-center w-full h-96 lg:w-1/2">
-        <img
-          className="object-cover w-full h-full max-w-2xl rounded-md border-2 transition duration-300 ease-in-out border-purple-700 hover:shadow-lg hover:shadow-purple-500 "
-          src={slides[currentIndex].image}
-          alt="Podcast AI"
-        />
-      </div>
+  <img
+    className="w-full h-full max-w-2xl rounded-md border-2 transition duration-300 ease-in-out border-purple-700 hover:shadow-lg hover:shadow-purple-500 object-cover"
+    style={{ aspectRatio: "16/9" }}
+    src={slides[currentIndex].image}
+    alt="Podcast AI"
+  />
+</div>
+
     </div>
     </header>
   );
