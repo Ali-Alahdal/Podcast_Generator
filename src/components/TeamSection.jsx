@@ -14,7 +14,7 @@ const TeamSection = () => {
 
         <div className="flex items-center justify-between gap-36 mt-20 ">
           {/* Team Member 1 */}
-          <div className="flex flex-col items-center p-8 px-12 transition duration-800 transform group hover:bg-[var(--bg-color)] hover:shadow-lg  hover:shadow-[var(--secondary-color)] rounded-xl">
+          <div className="flex flex-col items-center p-8 px-12 transition duration-800 transform group hover:bg-[var(--bg-color)] hover:shadow-lg  hover:shadow-[var(--primary-color)] rounded-xl">
             <img
               className="object-cover w-32 h-32 rounded-full ring-4 ring-zinc-700 "
               src="./src/assets/ali.jpg"
@@ -30,6 +30,7 @@ const TeamSection = () => {
               
               <a
                 href="https://www.linkedin.com/in/ali-alahdal/"
+                target="_blank"
                 className="mx-2 text-[var(--text-color)] dark:text-gray-300 hover:text-gray-500 dark:hover:text-gray-300 group-hover:text-white"
                 aria-label="Linkedin"
               >
@@ -41,6 +42,7 @@ const TeamSection = () => {
               </a>
               <a
                 href="https://github.com/Ali-Alahdal"
+                target="_blank"
                 className="mx-2 text-[var(--text-color)] dark:text-gray-300 hover:text-gray-500 dark:hover:text-gray-300 group-hover:text-white"
                 aria-label="Github"
               >
@@ -69,7 +71,8 @@ const TeamSection = () => {
               <div className="flex mt-3 -mx-2">
                 
                 <a
-                href="www.linkedin.com/in/husam-abdulraheem-042785243"
+                href="https://www.linkedin.com/in/husam-abdulraheem-042785243"
+                target="_blank"
                 className="mx-2 text-[var(--text-color)] dark:text-gray-300 hover:text-gray-500 dark:hover:text-gray-300 group-hover:text-white"
                 aria-label="Linkedin"
               >
@@ -81,6 +84,7 @@ const TeamSection = () => {
               </a>
                 <a
                   href="https://github.com/Husam-Abdulraheem"
+                target="_blank"
                   className="mx-2 text-[var(--text-color)] dark:text-gray-300 hover:text-gray-500 dark:hover:text-gray-300 group-hover:text-white"
                   aria-label="Github"
                 >
@@ -110,6 +114,7 @@ const TeamSection = () => {
                 
               <a
                 href="https://www.linkedin.com/in/abdulla-al-walidi-3418b3343/"
+                target="_blank"
                 className="mx-2 text-[var(--text-color)] dark:text-gray-300 hover:text-gray-500 dark:hover:text-gray-300 group-hover:text-white"
                 aria-label="Linkedin"
               >
@@ -121,6 +126,7 @@ const TeamSection = () => {
               </a>
                 <a
                   href="https://github.com/AbdullaWalidi11"
+                target="_blank"
                   className="mx-2 cursor-pointer text-[var(--text-color)] dark:text-gray-300 hover:text-gray-500 dark:hover:text-gray-300 group-hover:text-white"
                   aria-label="Github"
                 >
