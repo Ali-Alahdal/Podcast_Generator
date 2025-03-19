@@ -7,7 +7,7 @@ const slides = [
   {
     title: "أنشئ بودكاستك في ثوانٍ باستخدام الذكاء الاصطناعي!",
     text: "حوّل أي فكرة إلى حلقة جاهزة للنشر بصوت احترافي ونص متكامل.",
-    image: "./src/assets/two_ai.jpeg",
+    image: "./src/assets/two_ai.webp",
   },
   {
     title: "اصنع صوتك. أطلق قصتك. دع الذكاء الاصطناعي يقوم بالباقي!",
@@ -17,7 +17,7 @@ const slides = [
   {
     title: "لا تحتاج إلى مايك أو استوديو!",
     text: "كل ما تحتاجه هو فكرة، والباقي علينا. أنشئ بودكاستك الآن!",
-    image: "./src/assets/micChip.jpg",
+    image: "./src/assets/mic_chip.webp",
   },
 ];
 
