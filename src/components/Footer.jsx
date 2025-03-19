@@ -1,5 +1,6 @@
 import React from "react";
 import Logo from "../assets/logo.png";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -7,26 +8,43 @@ const Footer = () => {
       <div className="container px-6 py-8 mx-auto">
         {/* Logo and Navigation Links */}
         <div className="flex flex-col items-center text-center">
-          <a
-            href="#"
+          <Link
+            to={"/"}
             className="font-bold text-[var(--text-color)] dark:text-gray-200"
           >
+            
             <img src={Logo} className="w-auto h-24" alt="" />
           
-          </a>
+          </Link>
 
           <div className="flex flex-wrap justify-center mt-6 -mx-4">
-            {["الرئيسية", "بودكاستات منشئة", "فريق العمل", "معلومات التواصل"].map((link, index) => (
-              <a
-                key={index}
-                href="#"
-                className="mx-4 text-sm text-gray-600 transition-colors duration-300 hover:text-[var(--secondary-color)] dark:text-gray-300 dark:hover:text-blue-400"
-                aria-label={link}
-              >
-                {link}
-              </a>
-            ))}
-          </div>
+          <Link
+              to={"/#main"}
+              className="mx-4 text-sm text-gray-600 transition-colors duration-300 hover:text-[var(--secondary-color)] dark:text-gray-300 dark:hover:text-blue-400"
+            >
+              الرئيسية
+            </Link>
+            <Link
+              to={"/#podcasts"}
+              className="mx-4 text-sm text-gray-600 transition-colors duration-300 hover:text-[var(--secondary-color)] dark:text-gray-300 dark:hover:text-blue-400"
+
+            >
+              بودكاستات منشئة
+            </Link>
+            <Link
+              to={"/#Team"}
+              className="mx-4 text-sm text-gray-600 transition-colors duration-300 hover:text-[var(--secondary-color)] dark:text-gray-300 dark:hover:text-blue-400"
+
+            >
+              فريق العمل
+            </Link>
+            <Link
+              to={"/#footer"}
+              className="mx-4 text-sm text-gray-600 transition-colors duration-300 hover:text-[var(--secondary-color)] dark:text-gray-300 dark:hover:text-blue-400"
+            >
+              معلومات التواصل
+            </Link>
+        </div>
         </div>
 
         {/* Divider */}
