@@ -45,13 +45,13 @@ const Header = () => {
           <div className="flex items-center justify-between gap-1">
           
           </div>
-          <a href="#" className="">
+          <Link to={"/"} className="">
             <img
               className="w-auto h-28"
               src= {logo}
               alt="Logo"
             />
-          </a>
+          </Link>
           </div>
 
           <div className="flex items-center justify-center  text-gray-600 capitalize ">
@@ -109,7 +109,7 @@ const Header = () => {
           <div className="mt-6">
           <Link
   to="/new_podcast"
-  className="px-6 py-3 mt-6 text-sm font-semibold text-center text-white bg-gradient-to-r from-purple-700 via-purple-500 to-purple-400 rounded-xl shadow-lg transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-purple-500/50 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2"
+  className="px-6 py-3 mt-6 text-sm font-semibold text-center text-white bg-gradient-to-r from-purple-700  to-pink-500 rounded-xl shadow-lg transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-purple-500/50 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2"
 >
   انشئ بودكاستك الآن!
 </Link>

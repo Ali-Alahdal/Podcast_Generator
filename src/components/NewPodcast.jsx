@@ -9,7 +9,7 @@ function NewPodcast() {
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
         fill="currentColor"
-        className="w-24 h-24 text-[var(--primary-color)]  hover:text-[var(--secondary-color)] transition-colors duration-300"
+        className="w-24 h-24 text-[var(--primary-color)]  hover:text-purple-500 transition-colors duration-300"
       >
         <path
           fillRule="evenodd"

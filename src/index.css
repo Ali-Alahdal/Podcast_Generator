@@ -8,9 +8,13 @@
   --text-color: #ddd;
   --primary-color: #a51fc0;
   --secondary-color: #c642e037;
+  --third-color: #aa3bc0;
 }
 
 body {
   background-color: var(--bg-color);
   color: var(--text-color);
+  font-family: "Rubik", sans-serif;
+  font-weight: 400;
+
 }
