@@ -100,7 +100,7 @@ const Header = () => {
         </div>
 
         <div className="max-w-lg lg:mx-12 lg:order-2">
-          <h1 className="text-3xl font-semibold tracking-wide text-[var(--text-color)] dark:text-white lg:text-4xl">
+          <h1 className="text-3xl font-semibold tracking-wide text-[var(--text-color)] text-white lg:text-4xl">
             {slides[currentIndex].title}
           </h1>
           <p className="mt-4 text-gray-600 ">

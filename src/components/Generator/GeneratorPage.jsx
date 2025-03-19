@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import OpenAI from 'openai';
 import axios from 'axios';
 
+import Intro from "../../assets/audios/Intro.wav"
+import Outro from "../../assets/audios/Outro.wav"
+
 const openai = new OpenAI({
   apiKey: import.meta.env.VITE_API_KEY,
   dangerouslyAllowBrowser: true,
@@ -91,14 +94,19 @@ async function combineAudioBuffers(buffers) {
 
 // ----------------- Voice & Transcript Helpers -----------------
 
-function selectRandomVoices() {
-  const voices = ["alloy", "ash", "coral", "echo", "fable", "onyx", "nova", "sage", "shimmer"];
-  const hostVoice = voices[Math.floor(Math.random() * voices.length)];
-  let guestVoice = voices[Math.floor(Math.random() * voices.length)];
-  while (guestVoice === hostVoice) {
-    guestVoice = voices[Math.floor(Math.random() * voices.length)];
+// Define male and female voices
+const voices = {
+  male: ["alloy", "fable", "nova"],
+  female: ["coral", "echo", "sage", "shimmer"]
+};
+
+// Helper to get voice based on role (host, guest)
+function getVoiceForRole(role) {
+  if (role === "host") {
+    return voices.male[Math.floor(Math.random() * voices.male.length)];  // Male voice for host
+  } else {
+    return voices.female[Math.floor(Math.random() * voices.female.length)];  // Female voice for guest
   }
-  return { hostVoice, guestVoice };
 }
 
 async function generateLineAudio(lineText, voice) {
@@ -131,7 +139,7 @@ async function generatePodcastTranscript(topic, category) {
   return response.choices[0].message.content;
 }
 
-// ----------------- Image Generation Helpers -----------------
+// ----------------- Image Generation Helpers (DALL·E 3) -----------------
 
 async function generateImagePrompt(topic) {
   const prompt = `Generate a creative and appealing image prompt for a podcast cover about "${topic}". The prompt should evoke modern, artistic, and visually striking imagery suitable for a podcast cover. Include stylistic details such as color scheme, mood, and art style.`;
@@ -149,30 +157,14 @@ async function generateImagePrompt(topic) {
 }
 
 async function generatePodcastImage(imagePrompt) {
-  const options = {
-    method: 'POST',
-    url: 'https://api.starryai.com/creations/',
-    headers: {
-      accept: 'application/json',
-      'content-type': 'application/json',
-      'X-API-Key': import.meta.env.VITE_STARRYAI_API_KEY
-    },
-    data:  {
-      model: 'lyra',
-      aspectRatio: 'square',
-      highResolution: false,
-      images: 1,
-      steps: 20,
-      initialImageMode: 'color',
-      prompt: imagePrompt
-    }
-  };
-
-  const response = await axios.request(options);
-  return response.data.imageUrls[0];
+  const response = await openai.images.generate({
+    model: "dall-e-3", // DALL·E 3 model
+    prompt: imagePrompt,
+  });
+  return response.data[0].url;  // Return the image URL
 }
 
-
+// ----------------- Main Component -----------------
 
 function PodcastGenerator() {
   const [topic, setTopic] = useState('');
@@ -187,6 +179,7 @@ function PodcastGenerator() {
   const [imageUrl, setImageUrl] = useState(null);
   const [loadingImage, setLoadingImage] = useState(false);
 
+  // Generate transcript and select voices
   const handleGenerateTranscript = async (e) => {
     e.preventDefault();
     setLoadingTranscript(true);
@@ -203,15 +196,16 @@ function PodcastGenerator() {
       };
       const jsonBlob = new Blob([JSON.stringify(metadata, null, 2)], { type: 'application/json' });
       setJsonUrl(URL.createObjectURL(jsonBlob));
-      const voices = selectRandomVoices();
-      setHostVoice(voices.hostVoice);
-      setGuestVoice(voices.guestVoice);
+      setHostVoice(getVoiceForRole('host'));  // Assign voice based on role
+      setGuestVoice(getVoiceForRole('guest'));  // Assign voice based on role
     } catch (error) {
       console.error('Error generating transcript:', error);
+      alert('Failed to generate transcript.');
     }
     setLoadingTranscript(false);
   };
 
+  // Handle file upload for transcript JSON
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -224,10 +218,8 @@ function PodcastGenerator() {
           if (jsonData.topic) {
             setTopic(jsonData.topic);
           }
-          const voices = selectRandomVoices();
-          setHostVoice(voices.hostVoice);
-          setGuestVoice(voices.guestVoice);
-          // Automatically generate image if topic is available
+          setHostVoice(getVoiceForRole('host'));
+          setGuestVoice(getVoiceForRole('guest'));
           if (jsonData.topic) {
             setTimeout(() => {
               handleGenerateImage();
@@ -235,14 +227,17 @@ function PodcastGenerator() {
           }
         } else {
           console.error('Uploaded JSON does not contain a transcript property.');
+          alert('JSON file must contain a "transcript" field.');
         }
       } catch (error) {
         console.error('Error parsing JSON file:', error);
+        alert('Failed to parse JSON file.');
       }
     };
     reader.readAsText(file);
   };
 
+  // Generate audio from transcript
   const handleGenerateAudio = async () => {
     if (!transcript) return;
     setLoadingAudio(true);
@@ -250,8 +245,17 @@ function PodcastGenerator() {
       const lines = transcript.split('\n').filter(line => line.trim() !== '');
       const audioBuffers = [];
       const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  
+      // Load Intro and Outro Audio
+      const introBuffer = await loadAudioFile(Intro, audioContext);
+      const outroBuffer = await loadAudioFile(Outro, audioContext);
+  
+      // Add Intro to the audioBuffers array
+      audioBuffers.push(introBuffer);
+  
+      // Process each line of the transcript
       for (const line of lines) {
-        let speaker = null;
+        let speaker = 'host';
         let text = line;
         if (/^Host\s*:\s*/i.test(line)) {
           speaker = 'host';
@@ -259,26 +263,43 @@ function PodcastGenerator() {
         } else if (/^Guest\s*:\s*/i.test(line)) {
           speaker = 'guest';
           text = line.replace(/^Guest\s*:\s*/i, '');
-        } else {
-          speaker = 'host';
         }
         text = text.trim();
         if (!/[.!?]$/.test(text)) text += '.';
-        const chosenVoice = speaker === 'host' ? hostVoice : guestVoice;
+        const chosenVoice = (speaker === 'host') ? hostVoice : guestVoice;
         console.log(`Generating audio for ${speaker} (voice: ${chosenVoice}): "${text}"`);
+  
         const arrayBuffer = await generateLineAudio(text, chosenVoice);
         const decodedBuffer = await audioContext.decodeAudioData(arrayBuffer.slice(0));
-        audioBuffers.push(decodedBuffer);
+  
+        // Add a small "breathing" pause (e.g., 500ms of silence)
+        const silenceDuration = 1;  // 1500ms pause
+        const silenceBuffer = audioContext.createBuffer(decodedBuffer.numberOfChannels, silenceDuration * decodedBuffer.sampleRate, decodedBuffer.sampleRate);
+  
+        // Combine the speech and silence (breath)
+        audioBuffers.push(decodedBuffer, silenceBuffer);
       }
+  
+      // Add Outro to the audioBuffers array
+      audioBuffers.push(outroBuffer);
+  
+      // Combine all audio buffers (Intro + Transcript + Outro)
       const combinedBuffer = await combineAudioBuffers(audioBuffers);
       const wavBlob = audioBufferToWav(combinedBuffer);
       setCombinedAudioUrl(URL.createObjectURL(wavBlob));
     } catch (error) {
       console.error('Error generating audio:', error);
+      alert('Failed to generate audio.');
     }
     setLoadingAudio(false);
   };
-
+    // Helper function to load audio file and decode it
+  const loadAudioFile = async (filePath, audioContext) => {
+    const response = await fetch(filePath);
+    const arrayBuffer = await response.arrayBuffer();
+    return audioContext.decodeAudioData(arrayBuffer);
+  };
+  // Generate podcast image using DALL·E 3
   const handleGenerateImage = async () => {
     if (!topic) return;
     setLoadingImage(true);
@@ -289,8 +310,47 @@ function PodcastGenerator() {
       setImageUrl(imgUrl);
     } catch (error) {
       console.error("Error generating podcast image:", error);
+      alert('Failed to generate image.');
     }
     setLoadingImage(false);
+  };
+
+  // Send podcast data to the backend
+  const handleSendToBackend = async () => {
+    try {
+      const formData = new FormData();
+      formData.append('Subject', topic);
+      formData.append('Size', category);
+      formData.append('Content', transcript);
+      formData.append('IsPublic', 'true');
+      
+      // For audio file, fetch the blob from the URL
+      if (combinedAudioUrl) {
+        const audioResp = await fetch(combinedAudioUrl);
+        const audioBlob = await audioResp.blob();
+        formData.append('Audio', audioBlob, 'podcast.wav');
+      }
+      
+      // Send image URL as text (not as a file)
+      if (imageUrl) {
+        formData.append('Image', imageUrl);  // Send image URL as text
+      }
+
+      const response = await axios.post(
+        'https://podcastai.somee.com/api/podcast',
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+      console.log('Podcast submitted successfully!', response.data);
+      alert('Podcast submitted successfully!');
+    } catch (error) {
+      console.error('Error submitting podcast:', error);
+      alert('Failed to submit podcast.');
+    }
   };
 
   return (
@@ -374,6 +434,12 @@ function PodcastGenerator() {
             </a>
           </div>
         )}
+      </div>
+
+      <div style={{ marginTop: '2rem' }}>
+        <button onClick={handleSendToBackend} style={{ padding: '0.5rem' }}>
+          Send to Backend
+        </button>
       </div>
     </div>
   );
