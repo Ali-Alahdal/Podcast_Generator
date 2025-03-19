@@ -37,12 +37,6 @@ const Header = () => {
 
 
   return (
-<<<<<<< HEAD
-    <header className="bg-white " dir="rtl">
-      <nav className="bg-white ">
-        <div className=" flex  items-center p-0 m-0 justify-center">
-          <p className="font-bold">بودكاست AI</p>
-=======
     <header className="bg-[var(--bg-color)] text-[var(--text-color)]" dir="rtl">
       <nav className="">
         <div className=" flex  items-center p-0 m-0 justify-around">
@@ -52,7 +46,6 @@ const Header = () => {
           <div className="bg-white h-5 w-[1px]"></div>
           <p className="font-bold">AI</p>
           </div>
->>>>>>> d7dfde70ea12cf9e4b53c006c62f5dc2c468ff13
           <a href="#" className="">
             <img
               className="w-auto h-24"
@@ -108,11 +101,7 @@ const Header = () => {
         </div>
 
         <div className="max-w-lg lg:mx-12 lg:order-2">
-<<<<<<< HEAD
-          <h1 className="text-3xl font-semibold tracking-wide text-gray-800  lg:text-4xl">
-=======
           <h1 className="text-3xl font-semibold tracking-wide text-[var(--text-color)] dark:text-white lg:text-4xl">
->>>>>>> d7dfde70ea12cf9e4b53c006c62f5dc2c468ff13
             {slides[currentIndex].title}
           </h1>
           <p className="mt-4 text-gray-600 ">
