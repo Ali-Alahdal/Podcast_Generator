@@ -85,7 +85,7 @@ const Header = () => {
         </div>
       </nav>
 
-      <div id="main" className="container flex flex-col px-6 py-4 mx-auto space-y-6 lg:h-[32rem] lg:py-16 lg:flex-row lg:items-center">
+      <div id="main" className="container flex flex-col px-6 py-4 mx-auto space-y-6 lg:h-[32rem] lg:py-16 lg:flex-row lg:items-center animate-slideIn">
       <div className="flex flex-col items-center w-full lg:flex-row lg:w-1/2">
         <div className="flex justify-center order-2 mt-6 lg:mt-0 lg:space-y-3 lg:flex-col">
           {slides.map((_, index) => (
@@ -106,7 +106,7 @@ const Header = () => {
           <p className="mt-4 text-gray-600 ">
             {slides[currentIndex].text}
           </p>
-          <div className="mt-6">
+          <div className="mt-6">  
           <Link
   to="/new_podcast"
   className="px-6 py-3 mt-6 text-sm font-semibold text-center text-white bg-gradient-to-r from-purple-700  to-pink-500 rounded-xl shadow-lg transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-purple-500/50 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2"
