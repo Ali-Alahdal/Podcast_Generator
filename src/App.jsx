@@ -7,7 +7,10 @@ import TeamSection from "./components/TeamSection";
 import Footer from "./components/Footer";
 import { BrowserRouter , Routes , Route } from "react-router-dom";
 import TempContainer from "./components/Generator/TempContainer";
-// import GeneratorPage from "./components/Generator/GeneratorPage";
+import PodcastGenerator from "./components/Generator/GeneratorPage";
+import ImageGenerator from "./components/Generator/ImageGenerator";
+
+
 
 
 
@@ -36,7 +39,16 @@ function App() {
             } />
 
 
+
            <Route path={"/new_podcast"} element={<TempContainer />} />
+           <Route path={"/new_podcast2"} element={<PodcastGenerator />} />
+           <Route path={"/img"} element={<ImageGenerator />} />
+           <Route path={"/new_podcast"} element={<TempContainer />} />
+
+
+
+    
+
         </Routes>
      
       

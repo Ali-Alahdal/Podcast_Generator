@@ -4,13 +4,13 @@ import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
-    <footer id="footer" className="bg-[var(--bg-color)] dark:bg-gray-900 w-full">
+    <footer id="footer" className="bg-[var(--bg-color)]  w-full">
       <div className="container px-6 py-8 mx-auto">
         {/* Logo and Navigation Links */}
         <div className="flex flex-col items-center text-center">
           <Link
             to={"/"}
-            className="font-bold text-[var(--text-color)] dark:text-gray-200"
+            className="font-bold text-[var(--text-color)] "
           >
             
             <img src={Logo} className="w-auto h-24" alt="" />
@@ -20,27 +20,27 @@ const Footer = () => {
           <div className="flex flex-wrap justify-center mt-6 -mx-4">
           <Link
               to={"/#main"}
-              className="mx-4 text-sm text-gray-600 transition-colors duration-300 hover:text-[var(--secondary-color)] dark:text-gray-300 dark:hover:text-blue-400"
+              className="mx-4 text-sm text-gray-600 transition-colors duration-300 hover:text-[var(--secondary-color)] "
             >
               الرئيسية
             </Link>
             <Link
               to={"/#podcasts"}
-              className="mx-4 text-sm text-gray-600 transition-colors duration-300 hover:text-[var(--secondary-color)] dark:text-gray-300 dark:hover:text-blue-400"
+              className="mx-4 text-sm text-gray-600 transition-colors duration-300 hover:text-[var(--secondary-color)] "
 
             >
               بودكاستات منشئة
             </Link>
             <Link
               to={"/#Team"}
-              className="mx-4 text-sm text-gray-600 transition-colors duration-300 hover:text-[var(--secondary-color)] dark:text-gray-300 dark:hover:text-blue-400"
+              className="mx-4 text-sm text-gray-600 transition-colors duration-300 hover:text-[var(--secondary-color)] "
 
             >
               فريق العمل
             </Link>
             <Link
               to={"/#footer"}
-              className="mx-4 text-sm text-gray-600 transition-colors duration-300 hover:text-[var(--secondary-color)] dark:text-gray-300 dark:hover:text-blue-400"
+              className="mx-4 text-sm text-gray-600 transition-colors duration-300 hover:text-[var(--secondary-color)] "
             >
               معلومات التواصل
             </Link>
@@ -48,11 +48,11 @@ const Footer = () => {
         </div>
 
         {/* Divider */}
-        <hr className="my-6 border-gray-200 md:my-10 dark:border-gray-700" />
+        <hr className="my-6 border-gray-200 md:my-10 " />
 
         {/* Copyright and Social Media Icons */}
         <div className="flex flex-col items-center sm:flex-row sm:justify-between">
-          <p className="text-sm text-gray-500 dark:text-gray-300">
+          <p className="text-sm text-gray-500 ">
           © حقوق النشر 2025. جميع الحقوق محفوظة.
           </p>
 
@@ -70,7 +70,7 @@ const Footer = () => {
               <a
                 key={index}
                 href="#"
-                className="mx-2 text-gray-600 transition-colors duration-300 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400"
+                className="mx-2 text-gray-600 transition-colors duration-300  hover:text-blue-500 "
                 aria-label={social.name}
               >
                 <svg
