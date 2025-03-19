@@ -18,3 +18,12 @@ body {
   font-weight: 400;
 
 }
+
+.gradient-text {
+  font-size: 3rem;
+  font-weight: bold; 
+  background: linear-gradient(to right, #00f, #0f0); 
+  -webkit-background-clip: text; 
+  background-clip: text;
+  color: transparent; 
+}
