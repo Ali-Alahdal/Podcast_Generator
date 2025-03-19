@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import logo from "../assets/logo.png";
+import { Link } from "react-router-dom";
 
 
 const slides = [
@@ -42,20 +43,18 @@ const Header = () => {
         <div className=" flex  items-center p-0 m-0 justify-around">
           <div className="flex items-center justify-center">
           <div className="flex items-center justify-between gap-1">
-          <p className="font-bold">بودكاست</p>
-          <div className="bg-white h-5 w-[1px]"></div>
-          <p className="font-bold">AI</p>
+          
           </div>
-          <a href="#" className="">
+          <Link to={"/"} className="">
             <img
-              className="w-auto h-24"
+              className="w-auto h-28"
               src= {logo}
               alt="Logo"
             />
-          </a>
+          </Link>
           </div>
 
-          <div className="flex items-center justify-center mt-6 text-gray-600 capitalize ">
+          <div className="flex items-center justify-center  text-gray-600 capitalize ">
             <a
               href="#main"
               className="mx-2 text-[var(--text-color)] border-b-2 border-purple-600 "
@@ -101,30 +100,33 @@ const Header = () => {
         </div>
 
         <div className="max-w-lg lg:mx-12 lg:order-2">
-          <h1 className="text-3xl font-semibold tracking-wide text-[var(--text-color)] dark:text-white lg:text-4xl">
+          <h1 className="text-3xl font-semibold tracking-wide text-[var(--text-color)] text-white lg:text-4xl">
             {slides[currentIndex].title}
           </h1>
           <p className="mt-4 text-gray-600 ">
             {slides[currentIndex].text}
           </p>
           <div className="mt-6">
-            <a
-              href="#"
-              className="px-6 py-2.5 mt-6 text-sm font-medium leading-5 text-center text-white capitalize bg-gradient-to-b from-purple-800 to-purple-400 shadow-md shadow-purple-400 rounded-lg hover:shadow-md hover:shadow-purple-400  lg:mx-0 lg:w-auto focus:outline-none"
-            >
-              انشئ بودكاستك الآن!
-            </a>
+          <Link
+  to="/new_podcast"
+  className="px-6 py-3 mt-6 text-sm font-semibold text-center text-white bg-gradient-to-r from-purple-700  to-pink-500 rounded-xl shadow-lg transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-purple-500/50 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2"
+>
+  انشئ بودكاستك الآن!
+</Link>
+
           </div>
         </div>
       </div>
 
       <div className="flex items-center justify-center w-full h-96 lg:w-1/2">
-        <img
-          className="object-cover w-full h-full max-w-2xl rounded-md border-2 transition duration-300 ease-in-out border-purple-700 hover:shadow-lg hover:shadow-purple-500 "
-          src={slides[currentIndex].image}
-          alt="Podcast AI"
-        />
-      </div>
+  <img
+    className="w-full h-full max-w-2xl rounded-md border-2 transition duration-300 ease-in-out border-purple-700 hover:shadow-lg hover:shadow-purple-500 object-cover"
+    style={{ aspectRatio: "16/9" }}
+    src={slides[currentIndex].image}
+    alt="Podcast AI"
+  />
+</div>
+
     </div>
     </header>
   );

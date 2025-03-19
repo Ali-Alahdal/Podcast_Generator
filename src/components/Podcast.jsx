@@ -56,7 +56,7 @@ const Podcast = () => {
   }, []);
 
   return (
-    <div id="" className="bg-[var(--bg-color)] border-2  border-[var(--secondary-color)] hover:border-purple-400 cursor-pointer p-6  shadow-lg hover:shadow-sm hover:shadow-purple-400 rounded-lg    transition-shadow duration-300 ">
+    <div id="podcasts" className="bg-[var(--bg-color)] border-2  border-[var(--secondary-color)] hover:border-purple-400 cursor-pointer p-6  shadow-lg hover:shadow-sm hover:shadow-purple-400 rounded-xl    transition-shadow duration-300 ">
       {/* Album Cover */}
       <img
         src="https://telegra.ph/file/2acfcad8d39e49d95addd.jpg"
