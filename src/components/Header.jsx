@@ -97,10 +97,10 @@ const Header = () => {
               {slides[currentIndex].title}
             </h1>
             <p className="mt-4 text-gray-600 ">{slides[currentIndex].text}</p>
-            <div className="mt-6">
+            <div className="mt-12">
               <Link
                 to="/new_podcast"
-                className="px-6 py-3 mt-6 text-sm font-semibold text-center text-white bg-gradient-to-r from-purple-700  to-pink-500 rounded-xl shadow-lg transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-purple-500/50 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2"
+                className="px-10 py-4 mt-6 text-md font-semibold text-center text-white bg-gradient-to-r from-purple-700  to-pink-500 rounded-2xl shadow-lg transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-purple-500/50 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2"
               >
                 انشئ بودكاستك الآن!
               </Link>
