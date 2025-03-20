@@ -32,13 +32,7 @@ const Podcast = ({ subject, audioUrl, imageUrl}) => {
       />
 
       <div className="flex items-center justify-around mb-4 mt-5 gap-3  ">
-        
-      <div className="flex flex-col gap-2 overflow-hidden">
-          {/* Song Title */}
-          <h2 className="text-xl font-semibold text-center">{subject}</h2>
-
-         
-        </div>
+  
 
         {/* Music Controls */}
         <div className="flex justify-center items-center  " title={subject}>
