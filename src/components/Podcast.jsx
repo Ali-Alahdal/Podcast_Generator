@@ -22,11 +22,12 @@ const Podcast = ({ subject, audioUrl, imageUrl}) => {
     <div
       id="podcasts"
       className="bg-[var(--bg-color)] border-2  border-[var(--secondary-color)] hover:border-purple-400 cursor-pointer p-6  shadow-lg hover:shadow-sm hover:shadow-purple-400 rounded-xl transition-shadow duration-300 "
+      title={subject}
     >
       {/* Album Cover */}
       <img
         src={imageUrl}
-        alt="idk - Highvyn, Taylor Shin"
+        alt={subject}
         className="w-full h-48 object-cover rounded-lg mb-4"
       />
 
@@ -34,7 +35,13 @@ const Podcast = ({ subject, audioUrl, imageUrl}) => {
         
 
         {/* Music Controls */}
-        <div className="flex justify-center items-center  ">
+        <div className="flex justify-center items-center  " title={subject}>
+          <div className="flex flex-col gap-2">
+            {/* Song Title */}
+            <h2 className="text-md w-[80%] line-clamp-1 font-semibold text-center">{subject}</h2>
+
+          
+          </div>
           <button
             onClick={togglePlayPause}
             className="p-3 rounded-full bg-[var(--primary-color)] hover:bg-[var(--secondary-color)] focus:outline-none transition-colors duration-300"
@@ -72,12 +79,7 @@ const Podcast = ({ subject, audioUrl, imageUrl}) => {
             )}
           </button>
         </div>
-        <div className="flex flex-col gap-2">
-          {/* Song Title */}
-          <h2 className="text-xl font-semibold text-center">{subject}</h2>
 
-         
-        </div>
       </div>
 
       {/* Audio Element */}
