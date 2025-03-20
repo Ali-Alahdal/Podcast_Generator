@@ -1,4 +1,8 @@
 import React from "react";
+import image1 from "../assets/ali.jpg";
+import image2 from "../assets/husam.jpg";
+import image3 from "../assets/abdullah.jpg";
+
 
 const TeamSection = () => {
   return (
@@ -17,7 +21,7 @@ const TeamSection = () => {
           <div className="flex flex-col items-center p-8 px-12 transition duration-800 transform group hover:bg-[var(--bg-color)] hover:shadow-lg  hover:shadow-[var(--primary-color)] rounded-xl">
             <img
               className="object-cover w-32 h-32 rounded-full ring-4 ring-zinc-700 "
-              src="./src/assets/ali.jpg"
+              src={image1}
               alt="ali alahdal"
             />
             <h1 className="mt-4 text-2xl font-semibold text-[var(--text-color)] capitalize dark:text-white ">
@@ -58,7 +62,7 @@ const TeamSection = () => {
           <div className="flex flex-col items-center p-8 transition duration-800 transform group hover:shadow-lg hover:shadow-[var(--primary-color)] rounded-xl">
             <img
               className="object-cover w-32 h-32 rounded-full ring-4 ring-zinc-700"
-              src="./src/assets/husam.jpg"
+              src={image2}
               alt="husam abdulraheem"
             />
             <h1 className="mt-4 text-2xl font-semibold text-[var(--text-color)] capitalize dark:text-white ">
@@ -100,7 +104,7 @@ const TeamSection = () => {
           <div className="flex flex-col items-center p-8 px-10 transition duration-800 transform group hover:shadow-lg hover:shadow-[var(--primary-color)] rounded-xl">
             <img
               className="object-cover w-32 h-32 rounded-full ring-4 ring-zinc-700 "
-              src="./src/assets/abdullah.jpg"
+              src={image3}
               alt="abdullah walidi"
             />
             <h1 className="mt-4 text-2xl font-semibold text-[var(--text-color)] capitalize dark:text-white ">
