@@ -7,12 +7,8 @@ import axios from 'axios';
 
 import Intro from "../../assets/audios/Intro.wav"
 import Outro from "../../assets/audios/Outro.wav"
-import Podcast from "../Podcast";
 import GeneratedPodcast from "../GeneratedPodcast";
 
-import { jsPDF } from "jspdf";
-import pdfMake from "pdfmake/build/pdfmake";
-import pdfFonts from "pdfmake/build/vfs_fonts";
 
 
 
@@ -138,7 +134,7 @@ async function generatePodcastTranscript(topic, category) {
     large: { min: 700, max: 800 },
   };
   const range = wordRanges[category] || wordRanges.short;
-  const prompt = `Generate a podcast transcript discussing the topic "${topic}". The transcript should be a natural conversation between a host and a guest, labeled with "Host:" and "Guest:" at the start of their lines. It must include an engaging introduction, a dynamic discussion with questions and answers, and a clear ending that refers to our website "mypodcast". The entire transcript should be between ${range.min} and ${range.max} words. Do not include any stage directions or texts in square brackets.`;
+  const prompt = `Generate a podcast transcript discussing the topic "${topic}". The transcript should be a natural conversation between a host and a guest, labeled with "Host:" and "Guest:" at the start of their lines. It must include an engaging introduction, a dynamic discussion with questions and answers, and a clear ending that refers to see more great podcast on our website "Podcast AI". The entire transcript should be between ${range.min} and ${range.max} words. Do not include any stage directions or texts in square brackets.`;
   const messages = [
     { role: 'system', content: 'You are a creative podcast script generator.' },
     { role: 'user', content: prompt },
@@ -155,7 +151,7 @@ async function generatePodcastTranscript(topic, category) {
 // ----------------- Image Generation Helpers (DALL·E 3) -----------------
 
 async function generateImagePrompt(topic) {
-  const prompt = `Generate a podcast transcript discussing the topic "${topic}". The transcript should be a natural conversation between a host and a guest, labeled with "Host:" and "Guest:" at the start of their lines. It must include an engaging introduction, a dynamic discussion with questions and answers, and a clear ending that refers to see more great podcast on our website "Podcast AI". The entire transcript should be between ${range.min} and ${range.max} words. Do not include any stage directions or texts in square brackets.`;
+  const prompt = `Generate a creative and appealing image prompt for a podcast cover about "${topic}". The prompt should evoke modern, artistic, and visually striking imagery suitable for a podcast cover. Include stylistic details such as color scheme, mood, and art style.`;
   const messages = [
     { role: 'system', content: 'You are a creative image prompt generator.' },
     { role: 'user', content: prompt },
@@ -226,7 +222,7 @@ function TempContainer() {
       
     } catch (error) {
       console.error('Error generating transcript:', error);
-      alert('Failed to generate transcript.');
+     
       setLoading(false);
     }
     setLoadingTranscript(false);
@@ -293,7 +289,7 @@ function TempContainer() {
       setCombinedAudioUrl(URL.createObjectURL(wavBlob));
     } catch (error) {
       console.error('Error generating audio:', error);
-      alert('Failed to generate audio.');
+      
       setLoading(false);
     
     }
@@ -323,7 +319,6 @@ function TempContainer() {
       setImageUrl(imgUrl);
     } catch (error) {
       console.error("Error generating podcast image:", error);
-      alert('Failed to generate image.');
       setLoading(false);
     }
     setLoadingImage(false);
@@ -365,11 +360,10 @@ function TempContainer() {
         }
       );
       console.log('Podcast submitted successfully!', response.data);
-      alert('Podcast submitted successfully!');
+      
     } catch (error) {
       console.error('Error submitting podcast:', error);
-      alert('Failed to submit podcast.');
-
+     
     }
     setLoading(false);
 
