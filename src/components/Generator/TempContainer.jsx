@@ -10,6 +10,12 @@ import Outro from "../../assets/audios/Outro.wav"
 import Podcast from "../Podcast";
 import GeneratedPodcast from "../GeneratedPodcast";
 
+import { jsPDF } from "jspdf";
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
+
+
+
 const openai = new OpenAI({
   apiKey: import.meta.env.VITE_API_KEY,
   dangerouslyAllowBrowser: true,
@@ -96,6 +102,8 @@ async function combineAudioBuffers(buffers) {
   const renderedBuffer = await offlineCtx.startRendering();
   return renderedBuffer;
 }
+
+
 
 // ----------------- Voice & Transcript Helpers -----------------
 
@@ -207,23 +215,33 @@ function TempContainer() {
     try {
       console.log("Started Transscript");
       
+     
       const generatedTranscript = await generatePodcastTranscript(topic, category);
       setTranscript(generatedTranscript);
-      handleGenerateAudio(generatedTranscript , getVoiceForRole('host') ,getVoiceForRole('guest') );
-     
-      const metadata = {
-        topic,
-        category,
-        transcript: generatedTranscript,
-        generatedAt: new Date().toISOString(),
+      handleGenerateAudio(generatedTranscript, getVoiceForRole('host'), getVoiceForRole('guest'));
+
+      const docDefinition = {
+        content: [
+          { text: `Topic: ${topic}`, style: 'header' },
+          { text: `Category: ${category}`, style: 'subheader' },
+          { text: `Generated At: ${new Date().toISOString()}`, style: 'subheader' },
+          { text: 'Transcript:', style: 'subheader' },
+          { text: generatedTranscript, style: 'body' }
+        ],
+        styles: {
+          header: { fontSize: 18, bold: true, margin: [0, 0, 0, 10] },
+          subheader: { fontSize: 14, bold: true, margin: [0, 10, 0, 5] },
+          body: { fontSize: 12, margin: [0, 0, 0, 5] },
+        }
       };
-      const jsonBlob = new Blob([JSON.stringify(metadata, null, 2)], { type: 'application/json' });
-      setJsonUrl(URL.createObjectURL(jsonBlob));
+
+      const pdfDocGenerator = pdfMake.createPdf(docDefinition);
+      pdfDocGenerator.getBlob((blob) => {
+        setJsonUrl(URL.createObjectURL(blob)); // rename setJsonUrl to setPdfUrl if needed
+      });
       setHostVoice(getVoiceForRole('host'));  // Assign voice based on role
       setGuestVoice(getVoiceForRole('guest'));  // Assign voice based on role
-      if(jsonBlob){
-       
-      }
+      
     } catch (error) {
       console.error('Error generating transcript:', error);
       alert('Failed to generate transcript.');
@@ -231,7 +249,6 @@ function TempContainer() {
     }
     setLoadingTranscript(false);
     setTranscriptFinished(true);
-   
   };
 
   
@@ -357,7 +374,7 @@ function TempContainer() {
       }
   
       const response = await axios.post(
-        'https://podcastai.somee.com/api/podcast',
+        'https://podcastai.somee.com/api/podcast/podcast-details',
         formData,
         {
           headers: {
@@ -381,6 +398,9 @@ function TempContainer() {
     if(audioFinished === true && transscriptFininshed === true && imageFinished === true){
         if(combinedAudioUrl != null && imageUrl != null && transcript != ""){
           handleSendToBackend();
+          setAudioFinished(false);
+          setTranscriptFinished(false);
+          setImageFinished(false);
         }
     }
   }, [audioFinished , transscriptFininshed , imageFinished])
@@ -462,7 +482,7 @@ function TempContainer() {
                 أنشئ بودكاست
               </button>
               <div className="flex gap-6 justify-center items-center">
-                <a  href={jsonUrl} download="transcript.json" >
+                {/* <a  href={jsonUrl} download="transcript.pdf" >
                   <button disabled={loading} className="bg-[var(--bg-color)] flex border-2 px-10 py-2 transition duration-200 rounded-2xl text-[var(--text-color)] border-[#444] hover:bg-[#222]">
                   تنزيل النص
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
@@ -471,7 +491,7 @@ function TempContainer() {
 
                   </button>
 
-                </a>
+                </a> */}
 
                  <a  href={combinedAudioUrl} download="podcast.wav " className="flex ">
                   <button disabled={loading} className="bg-[var(--bg-color)] border-2 px-10 py-2 flex items-center transition duration-200 rounded-2xl text-[var(--text-color)] border-[#444] hover:bg-[#222]">

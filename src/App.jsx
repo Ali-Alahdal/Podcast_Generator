@@ -107,7 +107,7 @@ function App() {
                         ))}
                   </div>
 
-                  <hr className="border-purple-500" />
+                  <hr className="border-purple-500 w-[70%] flex mx-auto" />
 
                   {/* General Podcasts Section */}
                   <div className="text-3xl font-bold text-right py-10 px-20 text-purple-300 rounded-xl">
