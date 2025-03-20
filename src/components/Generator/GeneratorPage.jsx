@@ -125,7 +125,7 @@ async function generatePodcastTranscript(topic, category) {
     large: { min: 700, max: 800 },
   };
   const range = wordRanges[category] || wordRanges.short;
-  const prompt = `Generate a podcast transcript discussing the topic "${topic}". The transcript should be a natural conversation between a host and a guest, labeled with "Host:" and "Guest:" at the start of their lines. It must include an engaging introduction, a dynamic discussion with questions and answers, and a clear ending that refers to our website "mypodcast". The entire transcript should be between ${range.min} and ${range.max} words. Do not include any stage directions or texts in square brackets.`;
+  const prompt = `Generate a podcast transcript discussing the topic "${topic}". The transcript should be a natural conversation between a host and a guest, labeled with "Host:" and "Guest:" at the start of their lines. It must include an engaging introduction, a dynamic discussion with questions and answers, and a clear ending that refers to see more great podcast on our website "Podcast AI". The entire transcript should be between ${range.min} and ${range.max} words. Do not include any stage directions or texts in square brackets.`;
   const messages = [
     { role: 'system', content: 'You are a creative podcast script generator.' },
     { role: 'user', content: prompt },

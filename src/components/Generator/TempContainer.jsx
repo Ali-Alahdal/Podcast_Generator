@@ -234,38 +234,7 @@ function TempContainer() {
    
   };
 
-  // Handle file upload for transcript JSON
-  const handleFileUpload = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      try {
-        const jsonData = JSON.parse(event.target.result);
-        if (jsonData.transcript) {
-          setTranscript(jsonData.transcript);
-          if (jsonData.topic) {
-            setTopic(jsonData.topic);
-          }
-          setHostVoice(getVoiceForRole('host'));
-          setGuestVoice(getVoiceForRole('guest'));
-          if (jsonData.topic) {
-            setTimeout(() => {
-              handleGenerateImage();
-            }, 100);
-          }
-        } else {
-          console.error('Uploaded JSON does not contain a transcript property.');
-          alert('JSON file must contain a "transcript" field.');
-        }
-      } catch (error) {
-        console.error('Error parsing JSON file:', error);
-        alert('Failed to parse JSON file.');
-      }
-    };
-    reader.readAsText(file);
-  };
-
+  
   // Generate audio from transcript
   const handleGenerateAudio = async (generatedTranscript , hostVoice , guestVoice) => {
     if (!generatedTranscript) {
@@ -381,24 +350,10 @@ function TempContainer() {
         formData.append('Audio', audioBlob, 'podcast.wav');
       }
       
-      // For image file, fetch the image blob from the URL
       if (imageUrl) {
-        const res = await fetch('https://api.extract.pics/v0/extractions', {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer csk4NmpgIMEkgpwi9NseR84ZzN3HtSYILIGRpbKArY`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ url: imageUrl }),
-        })
-        console.log(res);
-        const j = await res.json()
         
-        const imageResp = await fetch(j.data.url);
-        const imageBlob = await imageResp.blob();
+        formData.append('Image', imageUrl); 
 
-
-        formData.append('Image', imageBlob, 'podcast_image.png'); // You can change the file extension based on the image type
       }
   
       const response = await axios.post(
@@ -470,56 +425,21 @@ function TempContainer() {
       
       <div className="text-[#999] flex flex-col items-center">
         <div className="container mx-auto h-96 flex flex-col md:flex-row  mt-10 ">
-          {/* Right Panel - Podcast Preview */}
-          {/* <div className="flex-1 bg-[#222] p-4 md:p-2 rounded-lg shadow-lg flex flex-col items-center mt-6 md:mt-0">
-            <div className="w-full h-full bg-[#111] flex flex-col gap-5 items-center justify-center rounded-sm p-4">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                className="size-12"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm8.706-1.442c1.146-.573 2.437.463 2.126 1.706l-.709 2.836.042-.02a.75.75 0 0 1 .67 1.34l-.04.022c-1.147.573-2.438-.463-2.127-1.706l.71-2.836-.042.02a.75.75 0 1 1-.671-1.34l.041-.022ZM12 9a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              <p className="px-4 md:px-20 text-center">
-                قم بإدخال موضوع في حقل الإدخال لكي تستطيع إنشاء بودكاست
-              </p>
-            </div>
-            <div className="flex justify-around items-center gap-4 md:gap-60 pt-3">
-              <p className="text-xl">{topic}</p>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                className="size-12 cursor-pointer"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm14.024-.983a1.125 1.125 0 0 1 0 1.966l-5.603 3.113A1.125 1.125 0 0 1 9 15.113V8.887c0-.857.921-1.4 1.671-.983l5.603 3.113Z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </div>
-           
-          </div> */}
+        
           <div className="w-full h-full ms-32">
             <GeneratedPodcast topic={topic} audio={combinedAudioUrl} image={imageUrl} loading={loading} loadingMsg={loadingMsg} />
 
           </div>
           
           {/* Left Panel - Controls */}
-          <div className="md:px-10 md:py-24 me-32 rounded-lg w-full md:w-1/3 shadow-md hover:shadow-xl text-left transition duration-200 hover:shadow-[var(--secondary-color)] shadow-[var(--secondary-color)]">
+          <div className=" md:py-24 me-32 rounded-lg w-full md:w-3/3 text-left transition duration-200 ">
             <div className="flex items-center gap-3 justify-end">
               {/* Podcast Length Selector (Dropdown replaced with select) */}
               <div className="relative inline-block">
                 <select
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
-                  className="block w-full bg-[var(--bg-color)] text-[var(--text-color)] border-2 border-gray-500 rounded-md px-3 py-2 focus:outline-none"
+                  className="block w-full  bg-[var(--bg-color)] text-[var(--text-color)] border-2 border-gray-500 rounded-md px-3 py-2 focus:outline-none"
                 >
                   
                   <option value="short">قصير</option>
@@ -538,24 +458,31 @@ function TempContainer() {
               />
             </div>
             <div className="flex flex-col gap-3 mt-10">
-              <button onClick={handleGenerateTranscript} className="bg-[var(--primary-color)] font-bold text-[var(--text-color)] px-12 transition duration-300 py-3 rounded-xl mb-5 hover:bg-[var(--third-color)]">
+              <button disabled={loading} onClick={handleGenerateTranscript} className="bg-[var(--primary-color)] font-bold text-[var(--text-color)] px-12 transition duration-300 py-3 rounded-xl mb-5 mx-12 ">
                 أنشئ بودكاست
               </button>
               <div className="flex gap-6 justify-center items-center">
                 <a  href={jsonUrl} download="transcript.json" >
-                  <button className="bg-[var(--bg-color)] border-2 px-10 py-2 transition duration-200 rounded-2xl text-[var(--text-color)] border-[#444] hover:bg-[#222]">
+                  <button disabled={loading} className="bg-[var(--bg-color)] flex border-2 px-10 py-2 transition duration-200 rounded-2xl text-[var(--text-color)] border-[#444] hover:bg-[#222]">
                   تنزيل النص
-                  
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                  </svg>
+
                   </button>
+
                 </a>
 
-                 <a  href={combinedAudioUrl} download="podcast.wav">
-                  <button className="bg-[var(--bg-color)] border-2 px-10 py-2 transition duration-200 rounded-2xl text-[var(--text-color)] border-[#444] hover:bg-[#222]">
+                 <a  href={combinedAudioUrl} download="podcast.wav " className="flex ">
+                  <button disabled={loading} className="bg-[var(--bg-color)] border-2 px-10 py-2 flex items-center transition duration-200 rounded-2xl text-[var(--text-color)] border-[#444] hover:bg-[#222]">
                   تنزيل الصوت  
+                  
+                  <svg className="size-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 18.75a6 6 0 0 0 6-6v-1.5m-6 7.5a6 6 0 0 1-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 0 1-3-3V4.5a3 3 0 1 1 6 0v8.25a3 3 0 0 1-3 3Z" />
+                  </svg>
                   </button>
                 </a>
 
-                <button onClick={handleSendToBackend} className="bg-[var(--bg-color)] border-2 px-10 py-2 transition duration-200 rounded-2xl text-[var(--text-color)] border-[#444] hover:bg-[#222]">backend</button>
               </div>
             </div>
           </div>
