@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 function NewPodcast() {
   return (
     
-    <Link to={"/new_podcast"} className="bg-[var(--bg-color)] border-2 border-[var(--secondary-color)] hover:border-purple-400 cursor-pointer p-6 rounded-lg shadow-lg hover:shadow-sm hover:shadow-purple-400 transition-shadow duration-300 flex flex-col gap-6  items-center justify-center">
+    <Link to={"/new_podcast"} className="bg-[var(--bg-color)] border-2 border-[var(--secondary-color)] hover:border-purple-400 cursor-pointer p-8 rounded-lg shadow-lg hover:shadow-sm hover:shadow-purple-400 transition-shadow duration-300 flex flex-col gap-6  items-center justify-center">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
