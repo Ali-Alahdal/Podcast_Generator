@@ -1,12 +1,14 @@
 import logo from "../../assets/logo.png";
 import { Link } from "react-router-dom";
 import Footer from "../Footer";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import OpenAI from 'openai';
 import axios from 'axios';
 
 import Intro from "../../assets/audios/Intro.wav"
 import Outro from "../../assets/audios/Outro.wav"
+import Podcast from "../Podcast";
+import GeneratedPodcast from "../GeneratedPodcast";
 
 const openai = new OpenAI({
   apiKey: import.meta.env.VITE_API_KEY,
@@ -187,6 +189,12 @@ function TempContainer() {
   const [guestVoice, setGuestVoice] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
   const [loadingImage, setLoadingImage] = useState(false);
+  const [loading , setLoading] = useState(false);
+  const [transscriptFininshed , setTranscriptFinished] = useState(false);
+  const [audioFinished , setAudioFinished] = useState(false);
+  const [imageFinished , setImageFinished] = useState(false);
+
+  const [loadingMsg , setLoadingMsg] = useState("")
 
   // Generate transcript and select voices
   const handleGenerateTranscript = async (e) => {
@@ -194,9 +202,15 @@ function TempContainer() {
     setLoadingTranscript(true);
     setCombinedAudioUrl(null);
     setJsonUrl(null);
+    setLoading(true);
+    setLoadingMsg("... جاري توليد المحتوى ");
     try {
+      console.log("Started Transscript");
+      
       const generatedTranscript = await generatePodcastTranscript(topic, category);
       setTranscript(generatedTranscript);
+      handleGenerateAudio(generatedTranscript , getVoiceForRole('host') ,getVoiceForRole('guest') );
+     
       const metadata = {
         topic,
         category,
@@ -207,11 +221,17 @@ function TempContainer() {
       setJsonUrl(URL.createObjectURL(jsonBlob));
       setHostVoice(getVoiceForRole('host'));  // Assign voice based on role
       setGuestVoice(getVoiceForRole('guest'));  // Assign voice based on role
+      if(jsonBlob){
+       
+      }
     } catch (error) {
       console.error('Error generating transcript:', error);
       alert('Failed to generate transcript.');
+      setLoading(false);
     }
     setLoadingTranscript(false);
+    setTranscriptFinished(true);
+   
   };
 
   // Handle file upload for transcript JSON
@@ -247,11 +267,18 @@ function TempContainer() {
   };
 
   // Generate audio from transcript
-  const handleGenerateAudio = async () => {
-    if (!transcript) return;
+  const handleGenerateAudio = async (generatedTranscript , hostVoice , guestVoice) => {
+    if (!generatedTranscript) {
+      console.log("Recjected");
+      return;
+    }
     setLoadingAudio(true);
+    setLoading(true);
+    setLoadingMsg("... جاري توليد الصوتيات ");
     try {
-      const lines = transcript.split('\n').filter(line => line.trim() !== '');
+      console.log("Started Audio");
+      
+      const lines = generatedTranscript.split('\n').filter(line => line.trim() !== '');
       const audioBuffers = [];
       const audioContext = new (window.AudioContext || window.webkitAudioContext)();
   
@@ -299,8 +326,12 @@ function TempContainer() {
     } catch (error) {
       console.error('Error generating audio:', error);
       alert('Failed to generate audio.');
+      setLoading(false);
+    
     }
     setLoadingAudio(false);
+    setAudioFinished(true);
+    handleGenerateImage();
   };
     // Helper function to load audio file and decode it
   const loadAudioFile = async (filePath, audioContext) => {
@@ -312,7 +343,12 @@ function TempContainer() {
   const handleGenerateImage = async () => {
     if (!topic) return;
     setLoadingImage(true);
+    
+
     try {
+      setLoading(true);
+      setLoadingMsg("...جاري اضافة اللمسات الاخيرة ");
+
       const imgPrompt = await generateImagePrompt(topic);
       console.log("Generated image prompt:", imgPrompt);
       const imgUrl = await generatePodcastImage(imgPrompt);
@@ -320,13 +356,18 @@ function TempContainer() {
     } catch (error) {
       console.error("Error generating podcast image:", error);
       alert('Failed to generate image.');
+      setLoading(false);
     }
     setLoadingImage(false);
+    setImageFinished(true);
+   
   };
 
-  // Send podcast data to the backend
   const handleSendToBackend = async () => {
     try {
+      setLoading(true);
+      setLoadingMsg("...جاري حفظ البودكاست");
+
       const formData = new FormData();
       formData.append('Subject', topic);
       formData.append('Size', category);
@@ -340,11 +381,26 @@ function TempContainer() {
         formData.append('Audio', audioBlob, 'podcast.wav');
       }
       
-      // Send image URL as text (not as a file)
+      // For image file, fetch the image blob from the URL
       if (imageUrl) {
-        formData.append('Image', imageUrl);  // Send image URL as text
-      }
+        const res = await fetch('https://api.extract.pics/v0/extractions', {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer csk4NmpgIMEkgpwi9NseR84ZzN3HtSYILIGRpbKArY`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ url: imageUrl }),
+        })
+        console.log(res);
+        const j = await res.json()
+        
+        const imageResp = await fetch(j.data.url);
+        const imageBlob = await imageResp.blob();
 
+
+        formData.append('Image', imageBlob, 'podcast_image.png'); // You can change the file extension based on the image type
+      }
+  
       const response = await axios.post(
         'https://podcastai.somee.com/api/podcast',
         formData,
@@ -359,9 +415,20 @@ function TempContainer() {
     } catch (error) {
       console.error('Error submitting podcast:', error);
       alert('Failed to submit podcast.');
+
     }
+    setLoading(false);
+
   };
 
+
+  useEffect(() =>{
+    if(audioFinished === true && transscriptFininshed === true && imageFinished === true){
+        if(combinedAudioUrl != null && imageUrl != null && transcript != ""){
+          handleSendToBackend();
+        }
+    }
+  }, [audioFinished , transscriptFininshed , imageFinished])
   return (
     <>
       <nav dir="rtl">
@@ -400,11 +467,11 @@ function TempContainer() {
           </div>
         </div>
       </nav>
-
+      
       <div className="text-[#999] flex flex-col items-center">
-        <div className="container mx-auto h-96 flex flex-col md:flex-row gap-10 md:gap-60 mt-10 px-20">
+        <div className="container mx-auto h-96 flex flex-col md:flex-row  mt-10 ">
           {/* Right Panel - Podcast Preview */}
-          <div className="flex-1 bg-[#222] p-4 md:p-2 rounded-lg shadow-lg flex flex-col items-center mt-6 md:mt-0">
+          {/* <div className="flex-1 bg-[#222] p-4 md:p-2 rounded-lg shadow-lg flex flex-col items-center mt-6 md:mt-0">
             <div className="w-full h-full bg-[#111] flex flex-col gap-5 items-center justify-center rounded-sm p-4">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -423,7 +490,7 @@ function TempContainer() {
               </p>
             </div>
             <div className="flex justify-around items-center gap-4 md:gap-60 pt-3">
-              <p className="text-xl">Podcast Subject</p>
+              <p className="text-xl">{topic}</p>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -437,22 +504,27 @@ function TempContainer() {
                 />
               </svg>
             </div>
-          </div>
+           
+          </div> */}
+          <div className="w-full h-full ms-32">
+            <GeneratedPodcast topic={topic} audio={combinedAudioUrl} image={imageUrl} loading={loading} loadingMsg={loadingMsg} />
 
+          </div>
+          
           {/* Left Panel - Controls */}
-          <div className="md:px-10 md:py-32 rounded-lg w-full md:w-1/3 shadow-md hover:shadow-xl text-left transition duration-200 hover:shadow-[var(--secondary-color)] shadow-[var(--secondary-color)]">
+          <div className="md:px-10 md:py-24 me-32 rounded-lg w-full md:w-1/3 shadow-md hover:shadow-xl text-left transition duration-200 hover:shadow-[var(--secondary-color)] shadow-[var(--secondary-color)]">
             <div className="flex items-center gap-3 justify-end">
               {/* Podcast Length Selector (Dropdown replaced with select) */}
               <div className="relative inline-block">
                 <select
-                  value={selectedOption}
-                  onChange={handleDropdownSelection}
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
                   className="block w-full bg-[var(--bg-color)] text-[var(--text-color)] border-2 border-gray-500 rounded-md px-3 py-2 focus:outline-none"
                 >
-                  <option value="خيارات" disabled>خيارات</option>
-                  <option value="قصير">قصير</option>
-                  <option value="متوسط">متوسط</option>
-                  <option value="طويل">طويل</option>
+                  
+                  <option value="short">قصير</option>
+                  <option value="medium">متوسط</option>
+                  <option value="large">طويل</option>
                 </select>
               </div>
 
@@ -466,16 +538,24 @@ function TempContainer() {
               />
             </div>
             <div className="flex flex-col gap-3 mt-10">
-              <button className="bg-[var(--primary-color)] font-bold text-[var(--text-color)] px-12 transition duration-300 py-3 rounded-xl mb-5 hover:bg-[var(--third-color)]">
+              <button onClick={handleGenerateTranscript} className="bg-[var(--primary-color)] font-bold text-[var(--text-color)] px-12 transition duration-300 py-3 rounded-xl mb-5 hover:bg-[var(--third-color)]">
                 أنشئ بودكاست
               </button>
               <div className="flex gap-6 justify-center items-center">
-                <button className="bg-[var(--bg-color)] border-2 px-10 py-2 transition duration-200 rounded-2xl text-[var(--text-color)] border-[#444] hover:bg-[#222]">
-                  احفظ
-                </button>
-                <button className="bg-[var(--bg-color)] border-2 px-10 py-2 transition duration-200 rounded-2xl text-[var(--text-color)] border-[#444] hover:bg-[#222]">
-                  حمل
-                </button>
+                <a  href={jsonUrl} download="transcript.json" >
+                  <button className="bg-[var(--bg-color)] border-2 px-10 py-2 transition duration-200 rounded-2xl text-[var(--text-color)] border-[#444] hover:bg-[#222]">
+                  تنزيل النص
+                  
+                  </button>
+                </a>
+
+                 <a  href={combinedAudioUrl} download="podcast.wav">
+                  <button className="bg-[var(--bg-color)] border-2 px-10 py-2 transition duration-200 rounded-2xl text-[var(--text-color)] border-[#444] hover:bg-[#222]">
+                  تنزيل الصوت  
+                  </button>
+                </a>
+
+                <button onClick={handleSendToBackend} className="bg-[var(--bg-color)] border-2 px-10 py-2 transition duration-200 rounded-2xl text-[var(--text-color)] border-[#444] hover:bg-[#222]">backend</button>
               </div>
             </div>
           </div>

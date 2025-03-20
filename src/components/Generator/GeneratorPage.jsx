@@ -142,7 +142,7 @@ async function generatePodcastTranscript(topic, category) {
 // ----------------- Image Generation Helpers (DALL·E 3) -----------------
 
 async function generateImagePrompt(topic) {
-  const prompt = `Generate a creative and appealing image prompt for a podcast cover about "${topic}". The prompt should evoke modern, artistic, and visually striking imagery suitable for a podcast cover. Include stylistic details such as color scheme, mood, and art style.`;
+  const prompt = `Generate a creative and simple image prompt for a podcast cover about "${topic}". Visually striking imagery suitable for a podcast cover.`;
   const messages = [
     { role: 'system', content: 'You are a creative image prompt generator.' },
     { role: 'user', content: prompt },
@@ -185,9 +185,12 @@ function PodcastGenerator() {
     setLoadingTranscript(true);
     setCombinedAudioUrl(null);
     setJsonUrl(null);
+
+    
     try {
       const generatedTranscript = await generatePodcastTranscript(topic, category);
       setTranscript(generatedTranscript);
+     
       const metadata = {
         topic,
         category,
@@ -203,6 +206,7 @@ function PodcastGenerator() {
       alert('Failed to generate transcript.');
     }
     setLoadingTranscript(false);
+    
   };
 
   // Handle file upload for transcript JSON

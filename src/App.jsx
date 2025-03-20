@@ -12,6 +12,7 @@ import ImageGenerator from "./components/Generator/ImageGenerator";
 // bjhkhk
 
 
+import LoadingSkeleton from "./components/Skeleton";
 
 function App() {
   return (
@@ -26,7 +27,7 @@ function App() {
                 <Header />
                 <div className="grid grid-cols-1 items-center" dir="rtl">
                   <div className="text-3xl font-bold text-right py-10 px-20 text-purple-300 rounded-xl">
-                   بودكاستات مميزة
+                  بودكاستات مميزة
                   </div>
                   <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-8 p-10">
                     <Podcast />
@@ -36,6 +37,7 @@ function App() {
                     <Podcast />
                     <Podcast />
                   </div>
+                    <LoadingSkeleton />
                   <div className="text-3xl font-bold text-right py-10 px-20 text-purple-300 rounded-xl">
                     بودكاستات عامة
                   </div>
@@ -50,10 +52,11 @@ function App() {
               </>
             } />
 
-
            <Route path={"/new_podcast"} element={<TempContainer />} />
            <Route path={"/new_podcast2"} element={<PodcastGenerator />} />
            <Route path={"/img"} element={<ImageGenerator />} />
+       
+
           <Route path={"/new_podcast"} element={<TempContainer />} />
         </Routes>
       </BrowserRouter>
