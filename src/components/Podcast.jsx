@@ -15,6 +15,27 @@ const Podcast = ({ subject, audioUrl, imageUrl}) => {
     }
   };
 
+  const textRef = useRef(null);
+  const containerRef = useRef(null);
+  const [isOverflowing, setIsOverflowing] = useState(false);
+
+  useEffect(() => {
+    const checkOverflow = () => {
+      if (
+        containerRef.current &&
+        textRef.current &&
+        textRef.current.scrollWidth > containerRef.current.clientWidth
+      ) {
+        setIsOverflowing(true);
+      } else {
+        setIsOverflowing(false);
+      }
+    };
+
+    checkOverflow();
+    window.addEventListener('resize', checkOverflow);
+    return () => window.removeEventListener('resize', checkOverflow);
+  }, [subject]);
 
 
 
@@ -35,12 +56,14 @@ const Podcast = ({ subject, audioUrl, imageUrl}) => {
   
 
         {/* Music Controls */}
-        <div className="flex justify-center items-center  " title={subject}>
-          <div className="flex flex-col gap-2">
-            {/* Song Title */}
-            <h2 className="text-md w-[80%] line-clamp-1 font-semibold text-center">{subject}</h2>
+        <div className="flex justify-center items-center w-full " title={subject}>
 
-          
+          <div className="flex flex-col gap-2 me-3 overflow-hidden w-[80%] relative" >
+            <div className="w-full overflow-hidden" ref={containerRef}>
+              <h2  ref={textRef} className={`text-md font-semibold whitespace-nowrap  ${  isOverflowing ? 'animate-marquee' : ''} `} >
+                {subject}
+              </h2>
+            </div>
           </div>
           <button
             onClick={togglePlayPause}

@@ -155,7 +155,7 @@ async function generatePodcastTranscript(topic, category) {
 // ----------------- Image Generation Helpers (DALL·E 3) -----------------
 
 async function generateImagePrompt(topic) {
-  const prompt = `Generate a creative and appealing image prompt for a podcast cover about "${topic}". The prompt should evoke modern, artistic, and visually striking imagery suitable for a podcast cover. Include stylistic details such as color scheme, mood, and art style.`;
+  const prompt = `Generate a podcast transcript discussing the topic "${topic}". The transcript should be a natural conversation between a host and a guest, labeled with "Host:" and "Guest:" at the start of their lines. It must include an engaging introduction, a dynamic discussion with questions and answers, and a clear ending that refers to see more great podcast on our website "Podcast AI". The entire transcript should be between ${range.min} and ${range.max} words. Do not include any stage directions or texts in square brackets.`;
   const messages = [
     { role: 'system', content: 'You are a creative image prompt generator.' },
     { role: 'user', content: prompt },
@@ -220,25 +220,7 @@ function TempContainer() {
       setTranscript(generatedTranscript);
       handleGenerateAudio(generatedTranscript, getVoiceForRole('host'), getVoiceForRole('guest'));
 
-      const docDefinition = {
-        content: [
-          { text: `Topic: ${topic}`, style: 'header' },
-          { text: `Category: ${category}`, style: 'subheader' },
-          { text: `Generated At: ${new Date().toISOString()}`, style: 'subheader' },
-          { text: 'Transcript:', style: 'subheader' },
-          { text: generatedTranscript, style: 'body' }
-        ],
-        styles: {
-          header: { fontSize: 18, bold: true, margin: [0, 0, 0, 10] },
-          subheader: { fontSize: 14, bold: true, margin: [0, 10, 0, 5] },
-          body: { fontSize: 12, margin: [0, 0, 0, 5] },
-        }
-      };
-
-      const pdfDocGenerator = pdfMake.createPdf(docDefinition);
-      pdfDocGenerator.getBlob((blob) => {
-        setJsonUrl(URL.createObjectURL(blob)); // rename setJsonUrl to setPdfUrl if needed
-      });
+     
       setHostVoice(getVoiceForRole('host'));  // Assign voice based on role
       setGuestVoice(getVoiceForRole('guest'));  // Assign voice based on role
       
