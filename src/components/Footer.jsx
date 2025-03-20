@@ -8,14 +8,14 @@ const Footer = () => {
       <div className="container px-6 py-8 mx-auto">
         {/* Logo and Navigation Links */}
         <div className="flex flex-col items-center text-center">
-          <Link
-            to={"/"}
+          <a
+            href="#main"
             className="font-bold text-[var(--text-color)] "
           >
             
             <img src={Logo} className="w-auto h-24" alt="" />
           
-          </Link>
+          </a>
 
           <div className="flex flex-wrap justify-center mt-6 -mx-4">
           <Link
