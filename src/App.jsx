@@ -31,7 +31,8 @@ function App() {
         const response = await axios.get(
           "https://www.podcastai.somee.com/api/Podcast/get-special-podcast"
         );
-        setSpecialPodcasts(response.data.data); // Assuming the response has a `data` field
+        setSpecialPodcasts(response.data.data); 
+        console.log(response);// Assuming the response has a `data` field
       } catch (error) {
         console.error("Error fetching featured podcasts:", error);
       }
@@ -43,7 +44,9 @@ function App() {
         const response = await axios.get(
           "https://www.podcastai.somee.com/api/Podcast/get-podcasts"
         );
-        setGeneralPodcasts(response.data.data); // Assuming the response has a `data` field
+        setGeneralPodcasts(response.data.data); 
+        console.log(response);
+        // Assuming the response has a `data` field
       } catch (error) {
         console.error("Error fetching general podcasts:", error);
       }
