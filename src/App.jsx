@@ -8,6 +8,7 @@ import TeamSection from "./components/TeamSection";
 import Footer from "./components/Footer";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import TempContainer from "./components/Generator/TempContainer";
+import LoadingSkeleton from "./components/Skeleton";
 
 function App() {
   const [specialPodcasts, setSpecialPodcasts] = useState([]);
