@@ -1,10 +1,9 @@
 import React, { useRef, useState, useEffect } from "react";
 
-const Podcast = () => {
+const Podcast = ({ subject, audioUrl, imageUrl}) => {
   const audioRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(0);
+ 
 
   const togglePlayPause = () => {
     if (audioRef.current.paused) {
@@ -16,44 +15,8 @@ const Podcast = () => {
     }
   };
 
-  const updateProgress = () => {
-    setCurrentTime(audioRef.current.currentTime);
-    setDuration(audioRef.current.duration);
-  };
 
-  const handleProgressClick = (e) => {
-    const progressBar = e.currentTarget;
-    const clickPosition = e.nativeEvent.offsetX;
-    const progressBarWidth = progressBar.clientWidth;
-    const seekTime = (clickPosition / progressBarWidth) * duration;
-    audioRef.current.currentTime = seekTime;
-  };
 
-  const formatTime = (time) => {
-    const minutes = Math.floor(time / 60);
-    const seconds = Math.floor(time % 60);
-    return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
-  };
-
-  useEffect(() => {
-    const audio = audioRef.current;
-
-    const handleTimeUpdate = () => {
-      updateProgress();
-    };
-
-    const handleLoadedMetadata = () => {
-      setDuration(audio.duration);
-    };
-
-    audio.addEventListener("timeupdate", handleTimeUpdate);
-    audio.addEventListener("loadedmetadata", handleLoadedMetadata);
-
-    return () => {
-      audio.removeEventListener("timeupdate", handleTimeUpdate);
-      audio.removeEventListener("loadedmetadata", handleLoadedMetadata);
-    };
-  }, []);
 
   return (
     <div
@@ -62,7 +25,7 @@ const Podcast = () => {
     >
       {/* Album Cover */}
       <img
-        src="https://telegra.ph/file/2acfcad8d39e49d95addd.jpg"
+        src={imageUrl}
         alt="idk - Highvyn, Taylor Shin"
         className="w-full h-48 object-cover rounded-lg mb-4"
       />
@@ -111,7 +74,7 @@ const Podcast = () => {
         </div>
         <div className="flex flex-col gap-2">
           {/* Song Title */}
-          <h2 className="text-xl font-semibold text-center">idk</h2>
+          <h2 className="text-xl font-semibold text-center">{subject}</h2>
 
          
         </div>
@@ -120,7 +83,7 @@ const Podcast = () => {
       {/* Audio Element */}
       <audio
         ref={audioRef}
-        src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+        src={audioUrl}
       >
         Your browser does not support the audio element.
       </audio>

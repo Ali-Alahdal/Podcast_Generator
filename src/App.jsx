@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import "./App.css";
 import Header from "./components/Header";
 import Podcast from "./components/Podcast";
@@ -10,6 +11,36 @@ import TempContainer from "./components/Generator/TempContainer";
 import LoadingSkeleton from "./components/Skeleton";
 
 function App() {
+  const [specialPodcasts, setSpecialPodcasts] = useState([]);
+  const [generalPodcasts, setGeneralPodcasts] = useState([]);
+
+  useEffect(() => {
+    // Fetch featured podcasts
+    const fetchSpecialPodcasts = async () => {
+      try {
+        const response = await axios.get("https://www.podcastai.somee.com/api/Podcast/get-special-podcast");
+        console.log(response);
+        setSpecialPodcasts(response.data.data); // Assuming the response has a `data` field
+      } catch (error) {
+        console.error("Error fetching featured podcasts:", error);
+      }
+    };
+
+    // Fetch general podcasts
+    const fetchGeneralPodcasts = async () => {
+      try {
+        const response = await axios.get("https://www.podcastai.somee.com/api/Podcast/get-podcasts");
+        console.log(response);
+        setGeneralPodcasts(response.data.data); // Assuming the response has a `data` field
+      } catch (error) {
+        console.error("Error fetching general podcasts:", error);
+      }
+    };
+
+    fetchSpecialPodcasts();
+    fetchGeneralPodcasts();
+  }, []);
+
   return (
     <>
       <BrowserRouter>
@@ -21,26 +52,43 @@ function App() {
               <>
                 <Header />
                 <div className="grid grid-cols-1 items-center" dir="rtl">
+                  {/* Featured Podcasts Section */}
                   <div className="text-3xl font-bold text-right py-10 px-20 text-purple-300 rounded-xl">
-                  بودكاستات مميزة
+                    بودكاستات مميزة
                   </div>
-                  <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-8 p-10">
-                    <Podcast />
-                    <Podcast />
-                    <Podcast />
-                    <Podcast />
-                    <Podcast />
-                    <Podcast />
+                  <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-8 p-10 mb-10">
+                    {specialPodcasts.map((podcast) => (
+                      <Podcast
+                        key={podcast.id}
+                        subject={podcast.subject}
+                        size={podcast.size}
+                        content={podcast.content}
+                        audioUrl={podcast.audioUrl}
+                        imageUrl={podcast.imageUrl}
+                      />
+                    ))}
                   </div>
-                    <LoadingSkeleton />
+
+                  <hr className="border-purple-500" />
+
+                  {/* General Podcasts Section */}
                   <div className="text-3xl font-bold text-right py-10 px-20 text-purple-300 rounded-xl">
                     بودكاستات عامة
                   </div>
                   <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-8 p-10">
-                    <Podcast />
-                    <Podcast />
+                    {generalPodcasts.map((podcast) => (
+                      <Podcast
+                        key={podcast.id}
+                        subject={podcast.subject}
+                        size={podcast.size}
+                        content={podcast.content}
+                        audioUrl={podcast.audioUrl}
+                        imageUrl={podcast.imageUrl}
+                      />
+                    ))}
                     <NewPodcast />
                   </div>
+
                   <TeamSection />
                   <Footer />
                 </div>
