@@ -24,3 +24,7 @@ dist-ssr
 *.sw?
 *.env*
 .env.local
+
+# Local Storage Uploads
+public/uploads/*
+!public/uploads/.keep
