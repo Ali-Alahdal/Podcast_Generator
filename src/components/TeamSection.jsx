@@ -28,7 +28,7 @@ const TeamSection = () => {
               Ali Alahdal
             </h1>
             <p className="mt-2 text-gray-500 capitalize dark:text-gray-300 ">
-              Frontend Engineer
+              Software Developer
             </p>
             <div className="flex mt-3 -mx-2">
 
@@ -69,7 +69,7 @@ const TeamSection = () => {
               Husam Abdulraheem
             </h1>
             <p className="mt-2 text-gray-500 capitalize dark:text-gray-300 ">
-              Backend Engineer
+              Software Developer
             </p>
             <div className="flex -mx-2">
               <div className="flex mt-3 -mx-2">
@@ -111,7 +111,7 @@ const TeamSection = () => {
               Abdullah Walidi
             </h1>
             <p className="mt-2 text-gray-500 capitalize dark:text-gray-300 ">
-              Frontend Engineer
+              Software Developer
             </p>
             <div className="flex -mx-2">
               <div className="flex mt-3 -mx-2">

@@ -3,6 +3,7 @@ import axios from "axios";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "./config/firebase";
 import "./App.css";
+import NotificationBanner from "./components/NotificationBanner";
 import Header from "./components/Header";
 import Podcast from "./components/Podcast";
 import NewPodcast from "./components/NewPodcast";
@@ -60,6 +61,7 @@ function App() {
             path={"/"}
             element={
               <>
+                <NotificationBanner />
                 <Header />
                 <div className="grid grid-cols-1 items-center">
                   {/* Featured Podcasts Section */}
