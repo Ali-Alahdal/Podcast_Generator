@@ -3,15 +3,14 @@ import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
 
-// Your web app's Firebase configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyCusN7nJ0NRx87fw2HMka_212UQd3pJWCk",
-    authDomain: "podcast-ai-b8a6a.firebaseapp.com",
-    projectId: "podcast-ai-b8a6a",
-    storageBucket: "podcast-ai-b8a6a.firebasestorage.app",
-    messagingSenderId: "257818287151",
-    appId: "1:257818287151:web:41a74526733c4e35af3ada",
-    measurementId: "G-29GB247BY4"
+    apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+    authDomain: import.meta.env.VITE_AUTH_DOMAIN,
+    projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+    storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+    appId: import.meta.env.VITE_FIREBASE_APP_ID,
+    measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
 // Initialize Firebase

@@ -80,18 +80,7 @@ const Header = () => {
         className="container flex flex-col px-6 py-4 mx-auto space-y-6 lg:h-[32rem] lg:py-16 lg:flex-row lg:items-center animate-slideIn"
       >
         <div className="flex flex-col items-center w-full lg:flex-row lg:w-1/2">
-          <div className="flex justify-center order-2 mt-6 lg:mt-0 lg:space-y-3 lg:flex-col">
-            {slides.map((_, index) => (
-              <button
-                key={index}
-                className={`w-3 h-3 mx-2 rounded-full lg:mx-0 focus:outline-none ${index === currentIndex
-                  ? "bg-purple-600"
-                  : "bg-gray-300 hover:bg-purple-400"
-                  }`}
-                onClick={() => setCurrentIndex(index)}
-              ></button>
-            ))}
-          </div>
+
 
           <div className="max-w-lg lg:mx-12 lg:order-2">
             <h1 className="text-3xl font-semibold tracking-wide text-[var(--text-color)] text-white lg:text-4xl">
@@ -106,6 +95,20 @@ const Header = () => {
                 Create Your Podcast Now!
               </Link>
             </div>
+          </div>
+
+
+          <div className="flex justify-center order-2 mt-6 lg:mt-0 lg:space-y-3 lg:flex-col mx-12">
+            {slides.map((_, index) => (
+              <button
+                key={index}
+                className={`w-3 h-3 mx-2 rounded-full lg:mx-0 focus:outline-none ${index === currentIndex
+                  ? "bg-purple-600"
+                  : "bg-gray-300 hover:bg-purple-400"
+                  }`}
+                onClick={() => setCurrentIndex(index)}
+              ></button>
+            ))}
           </div>
         </div>
 
