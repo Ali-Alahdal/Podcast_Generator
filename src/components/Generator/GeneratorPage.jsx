@@ -186,11 +186,11 @@ function PodcastGenerator() {
     setCombinedAudioUrl(null);
     setJsonUrl(null);
 
-    
+
     try {
       const generatedTranscript = await generatePodcastTranscript(topic, category);
       setTranscript(generatedTranscript);
-     
+
       const metadata = {
         topic,
         category,
@@ -206,7 +206,7 @@ function PodcastGenerator() {
       alert('Failed to generate transcript.');
     }
     setLoadingTranscript(false);
-    
+
   };
 
   // Handle file upload for transcript JSON
@@ -249,14 +249,14 @@ function PodcastGenerator() {
       const lines = transcript.split('\n').filter(line => line.trim() !== '');
       const audioBuffers = [];
       const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-  
+
       // Load Intro and Outro Audio
       const introBuffer = await loadAudioFile(Intro, audioContext);
       const outroBuffer = await loadAudioFile(Outro, audioContext);
-  
+
       // Add Intro to the audioBuffers array
       audioBuffers.push(introBuffer);
-  
+
       // Process each line of the transcript
       for (const line of lines) {
         let speaker = 'host';
@@ -272,21 +272,21 @@ function PodcastGenerator() {
         if (!/[.!?]$/.test(text)) text += '.';
         const chosenVoice = (speaker === 'host') ? hostVoice : guestVoice;
         console.log(`Generating audio for ${speaker} (voice: ${chosenVoice}): "${text}"`);
-  
+
         const arrayBuffer = await generateLineAudio(text, chosenVoice);
         const decodedBuffer = await audioContext.decodeAudioData(arrayBuffer.slice(0));
-  
+
         // Add a small "breathing" pause (e.g., 500ms of silence)
         const silenceDuration = 1;  // 1500ms pause
         const silenceBuffer = audioContext.createBuffer(decodedBuffer.numberOfChannels, silenceDuration * decodedBuffer.sampleRate, decodedBuffer.sampleRate);
-  
+
         // Combine the speech and silence (breath)
         audioBuffers.push(decodedBuffer, silenceBuffer);
       }
-  
+
       // Add Outro to the audioBuffers array
       audioBuffers.push(outroBuffer);
-  
+
       // Combine all audio buffers (Intro + Transcript + Outro)
       const combinedBuffer = await combineAudioBuffers(audioBuffers);
       const wavBlob = audioBufferToWav(combinedBuffer);
@@ -297,7 +297,7 @@ function PodcastGenerator() {
     }
     setLoadingAudio(false);
   };
-    // Helper function to load audio file and decode it
+  // Helper function to load audio file and decode it
   const loadAudioFile = async (filePath, audioContext) => {
     const response = await fetch(filePath);
     const arrayBuffer = await response.arrayBuffer();
@@ -327,14 +327,14 @@ function PodcastGenerator() {
       formData.append('Size', category);
       formData.append('Content', transcript);
       formData.append('IsPublic', 'true');
-      
+
       // For audio file, fetch the blob from the URL
       if (combinedAudioUrl) {
         const audioResp = await fetch(combinedAudioUrl);
         const audioBlob = await audioResp.blob();
         formData.append('Audio', audioBlob, 'podcast.wav');
       }
-      
+
       // Send image URL as text (not as a file)
       if (imageUrl) {
         formData.append('Image', imageUrl);  // Send image URL as text
@@ -349,11 +349,11 @@ function PodcastGenerator() {
           },
         }
       );
-      console.log('Podcast submitted successfully!', response.data);
-      alert('Podcast submitted successfully!');
+      console.log('Podcast Generated successfully!', response.data);
+      alert('Podcast Generated successfully!');
     } catch (error) {
-      console.error('Error submitting podcast:', error);
-      alert('Failed to submit podcast.');
+      console.error('Error generating podcast:', error);
+      alert('Failed to generating podcast.');
     }
   };
 

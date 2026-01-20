@@ -12,39 +12,39 @@ const Footer = () => {
             href="#main"
             className="font-bold text-[var(--text-color)] "
           >
-            
+
             <img src={Logo} className="w-auto h-24" alt="" />
-          
+
           </a>
 
           <div className="flex flex-wrap justify-center mt-6 -mx-4">
-          <Link
+            <Link
               to={"/#main"}
               className="mx-4 text-sm text-gray-600 transition-colors duration-300 hover:text-[var(--secondary-color)] "
             >
-              الرئيسية
+              Home
             </Link>
             <Link
               to={"/#podcasts"}
               className="mx-4 text-sm text-gray-600 transition-colors duration-300 hover:text-[var(--secondary-color)] "
 
             >
-              بودكاستات منشئة
+              Generated Podcasts
             </Link>
             <Link
               to={"/#Team"}
               className="mx-4 text-sm text-gray-600 transition-colors duration-300 hover:text-[var(--secondary-color)] "
 
             >
-              فريق العمل
+              Team
             </Link>
             <Link
               to={"/#footer"}
               className="mx-4 text-sm text-gray-600 transition-colors duration-300 hover:text-[var(--secondary-color)] "
             >
-              معلومات التواصل
+              Contact Info
             </Link>
-        </div>
+          </div>
         </div>
 
         {/* Divider */}
@@ -53,7 +53,7 @@ const Footer = () => {
         {/* Copyright and Social Media Icons */}
         <div className="flex flex-col items-center sm:flex-row sm:justify-between">
           <p className="text-sm text-gray-500 ">
-          © حقوق النشر 2025. جميع الحقوق محفوظة.
+            © Copyright 2025. All Rights Reserved.
           </p>
 
           <div className="flex -mx-2">

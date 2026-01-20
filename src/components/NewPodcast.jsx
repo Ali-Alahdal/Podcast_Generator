@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 function NewPodcast() {
   return (
-    
+
     <Link to={"/new_podcast"} className="bg-[var(--bg-color)] border-2 border-[var(--secondary-color)] hover:border-purple-400 cursor-pointer p-8 rounded-lg shadow-lg hover:shadow-sm hover:shadow-purple-400 transition-shadow duration-300 flex flex-col gap-6  items-center justify-center">
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -17,10 +17,10 @@ function NewPodcast() {
           clipRule="evenodd"
         />
       </svg>
-      <p className='p-5'>قم بتوليد بودكاستك الخاص والإستماع إلى مواضيع شيقة ومثيرة للإهتمام </p>
+      <p className='p-5'>Generate your own podcast and listen to interesting and exciting topics</p>
     </Link>
   );
-} 
+}
 
 
 export default NewPodcast;

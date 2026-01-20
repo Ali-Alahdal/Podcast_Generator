@@ -7,18 +7,18 @@ import image3 from "../assets/mic_chip.webp";
 
 const slides = [
   {
-    title: "أنشئ بودكاستك في ثوانٍ باستخدام الذكاء الاصطناعي!",
-    text: "حوّل أي فكرة إلى حلقة جاهزة للنشر بصوت احترافي ونص متكامل.",
+    title: "Create your podcast in seconds using AI!",
+    text: "Turn any idea into a publish-ready episode with professional voice and full script.",
     image: image1,
   },
   {
-    title: "اصنع صوتك. أطلق قصتك. دع الذكاء الاصطناعي يقوم بالباقي!",
-    text: "من الفكرة إلى البث – بودكاست احترافي بضغطة زر.",
+    title: "Create your voice. Launch your story. Let AI do the rest!",
+    text: "From idea to broadcast – professional podcast at the click of a button.",
     image: image2,
   },
   {
-    title: "لا تحتاج إلى مايك أو استوديو أو حتى مونتاج!",
-    text: "كل ما تحتاجه هو فكرة، والباقي علينا. أنشئ بودكاستك الآن!",
+    title: "No microphone, studio, or editing needed!",
+    text: "All you need is an idea, and we handle the rest. Create your podcast now!",
     image: image3,
   },
 ];
@@ -34,7 +34,7 @@ const Header = () => {
   }, []);
 
   return (
-    <header className="bg-[var(--bg-color)] text-[var(--text-color)]" dir="rtl">
+    <header className="bg-[var(--bg-color)] text-[var(--text-color)]">
       <nav className="">
         <div className=" flex  items-center p-0 m-0 justify-around">
           <div className="flex items-center justify-center">
@@ -49,25 +49,25 @@ const Header = () => {
               href="#main"
               className="mx-2 text-[var(--text-color)] border-b-2 border-purple-600 "
             >
-              الرئيسية
+              Home
             </a>
             <a
               href="#podcasts"
               className="mx-2 text-[var(--text-color)] border-b-2 border-transparent hover:text-gray-100  hover:border-purple-600 sm:mx-6"
             >
-              بودكاستات منشئة
+              Generated Podcasts
             </a>
             <a
               href="#team"
               className="mx-2 text-[var(--text-color)] border-b-2 border-transparent hover:text-gray-100  hover:border-purple-600 sm:mx-6"
             >
-              فريق العمل
+              Team
             </a>
             <a
               href="#footer"
               className="mx-2 text-[var(--text-color)] border-b-2 border-transparent hover:text-gray-100  hover:border-purple-600 sm:mx-6"
             >
-              معلومات التواصل
+              Contact Info
             </a>
           </div>
         </div>
@@ -82,11 +82,10 @@ const Header = () => {
             {slides.map((_, index) => (
               <button
                 key={index}
-                className={`w-3 h-3 mx-2 rounded-full lg:mx-0 focus:outline-none ${
-                  index === currentIndex
-                    ? "bg-purple-600"
-                    : "bg-gray-300 hover:bg-purple-400"
-                }`}
+                className={`w-3 h-3 mx-2 rounded-full lg:mx-0 focus:outline-none ${index === currentIndex
+                  ? "bg-purple-600"
+                  : "bg-gray-300 hover:bg-purple-400"
+                  }`}
                 onClick={() => setCurrentIndex(index)}
               ></button>
             ))}
@@ -102,7 +101,7 @@ const Header = () => {
                 to="/new_podcast"
                 className="px-10 py-4 mt-6 text-md font-semibold text-center text-white bg-gradient-to-r from-purple-700  to-pink-500 rounded-2xl shadow-lg transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-purple-500/50 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2"
               >
-                انشئ بودكاستك الآن!
+                Create Your Podcast Now!
               </Link>
             </div>
           </div>

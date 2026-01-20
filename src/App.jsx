@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "./config/firebase";
 import "./App.css";
 import Header from "./components/Header";
 import Podcast from "./components/Podcast";
@@ -10,6 +12,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import TempContainer from "./components/Generator/TempContainer";
 import PodcastGenerator from "./components/Generator/GeneratorPage";
 import ImageGenerator from "./components/Generator/ImageGenerator";
+import UploadPodcast from "./components/UploadPodcast";
 // bjhkhk
 
 
@@ -22,47 +25,30 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate a delay of 3 seconds (3000 milliseconds)
-    const delay = 1000;
-
-    // Fetch featured podcasts
-    const fetchSpecialPodcasts = async () => {
+    const fetchPodcasts = async () => {
       try {
-        const response = await axios.get(
-          "https://www.podcastai.somee.com/api/Podcast/get-special-podcast"
-        );
-        setSpecialPodcasts(response.data.data); 
-        console.log(response);// Assuming the response has a `data` field
+        const querySnapshot = await getDocs(collection(db, "podcasts"));
+        const podcastsData = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          subject: doc.data().topic,
+          size: doc.data().category,
+          content: doc.data().transcript,
+          imageUrl: doc.data().imageUrl,
+          audioUrl: doc.data().audioUrl
+        }));
+
+        // For now, simple split or just duplicate for demo
+        setSpecialPodcasts(podcastsData.slice(0, 2));
+        setGeneralPodcasts(podcastsData);
+
       } catch (error) {
-        console.error("Error fetching featured podcasts:", error);
+        console.error("Error fetching podcasts from Firestore:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
-    // Fetch general podcasts
-    const fetchGeneralPodcasts = async () => {
-      try {
-        const response = await axios.get(
-          "https://www.podcastai.somee.com/api/Podcast/get-podcasts"
-        );
-        setGeneralPodcasts(response.data.data); 
-        console.log(response);
-        // Assuming the response has a `data` field
-      } catch (error) {
-        console.error("Error fetching general podcasts:", error);
-      }
-    };
-
-    // Fetch data immediately
-    fetchSpecialPodcasts();
-    fetchGeneralPodcasts();
-
-    // Set a timeout to disable loading state after 3 seconds
-    const loadingTimeout = setTimeout(() => {
-      setIsLoading(false);
-    }, delay);
-
-    // Cleanup the timeout to avoid memory leaks
-    return () => clearTimeout(loadingTimeout);
+    fetchPodcasts();
   }, []);
 
   return (
@@ -75,75 +61,73 @@ function App() {
             element={
               <>
                 <Header />
-                <div className="grid grid-cols-1 items-center" dir="rtl">
+                <div className="grid grid-cols-1 items-center">
                   {/* Featured Podcasts Section */}
-                  <div className="text-3xl font-bold text-right py-10 px-20 text-purple-300 rounded-xl">
-                    بودكاستات مميزة
+                  <div className="text-3xl font-bold text-left py-10 px-20 text-purple-300 rounded-xl">
+                    Featured Podcasts
                   </div>
                   <div
-                    className={`grid ${
-                      isLoading
-                        ? ""
-                        : "grid-cols-2 md:grid-cols-2 lg:grid-cols-4"
-                    } gap-8 p-10 mb-10`}
+                    className={`grid ${isLoading
+                      ? ""
+                      : "grid-cols-2 md:grid-cols-2 lg:grid-cols-4"
+                      } gap-8 p-10 mb-10`}
                   >
                     {isLoading
                       ? Array.from({ length: specialPodcasts.length }).map(
-                          (_, index) => <LoadingSkeleton key={index} />
-                        )
+                        (_, index) => <LoadingSkeleton key={index} />
+                      )
                       : specialPodcasts.map((podcast) => (
-                          <motion.div
-                            key={podcast.id}
-                            initial={{ opacity: 0, scale: 0.9 }} // Initial state (hidden and scaled down)
-                            whileInView={{ opacity: 1, scale: 1 }} // Animate when in view
-                            transition={{ duration: 0.5, delay: 0.2 }} // Animation duration and delay
-                            viewport={{ once: true }} // Only animate once
-                          >
-                            <Podcast
-                              subject={podcast.subject}
-                              size={podcast.size}
-                              content={podcast.content}
-                              audioUrl={podcast.audioUrl}
-                              imageUrl={podcast.imageUrl}
-                            />
-                          </motion.div>
-                        ))}
+                        <motion.div
+                          key={podcast.id}
+                          initial={{ opacity: 0, scale: 0.9 }} // Initial state (hidden and scaled down)
+                          whileInView={{ opacity: 1, scale: 1 }} // Animate when in view
+                          transition={{ duration: 0.5, delay: 0.2 }} // Animation duration and delay
+                          viewport={{ once: true }} // Only animate once
+                        >
+                          <Podcast
+                            subject={podcast.subject}
+                            size={podcast.size}
+                            content={podcast.content}
+                            audioUrl={podcast.audioUrl}
+                            imageUrl={podcast.imageUrl}
+                          />
+                        </motion.div>
+                      ))}
                   </div>
 
                   <hr className="border-purple-500 w-[70%] flex mx-auto" />
 
                   {/* General Podcasts Section */}
-                  <div className="text-3xl font-bold text-right py-10 px-20 text-purple-300 rounded-xl">
-                    بودكاستات عامة
+                  <div className="text-3xl font-bold text-left py-10 px-20 text-purple-300 rounded-xl">
+                    General Podcasts
                   </div>
                   <div
-                    className={`grid ${
-                      isLoading
-                        ? ""
-                        : "grid-cols-2 md:grid-cols-2 lg:grid-cols-4"
-                    } gap-8 p-10 mb-10`}
+                    className={`grid ${isLoading
+                      ? ""
+                      : "grid-cols-2 md:grid-cols-2 lg:grid-cols-4"
+                      } gap-8 p-10 mb-10`}
                   >
                     {isLoading
                       ? Array.from({ length: generalPodcasts.length }).map(
-                          (_, index) => <LoadingSkeleton key={index} />
-                        )
+                        (_, index) => <LoadingSkeleton key={index} />
+                      )
                       : generalPodcasts.map((podcast) => (
-                          <motion.div
-                            key={podcast.id}
-                            initial={{ opacity: 0, scale: 0.9 }} // Initial state (hidden and scaled down)
-                            whileInView={{ opacity: 1, scale: 1 }} // Animate when in view
-                            transition={{ duration: 0.5, delay: 0.2 }} // Animation duration and delay
-                            viewport={{ once: true }} // Only animate once
-                          >
-                            <Podcast
-                              subject={podcast.subject}
-                              size={podcast.size}
-                              content={podcast.content}
-                              audioUrl={podcast.audioUrl}
-                              imageUrl={podcast.imageUrl}
-                            />
-                          </motion.div>
-                        ))}
+                        <motion.div
+                          key={podcast.id}
+                          initial={{ opacity: 0, scale: 0.9 }} // Initial state (hidden and scaled down)
+                          whileInView={{ opacity: 1, scale: 1 }} // Animate when in view
+                          transition={{ duration: 0.5, delay: 0.2 }} // Animation duration and delay
+                          viewport={{ once: true }} // Only animate once
+                        >
+                          <Podcast
+                            subject={podcast.subject}
+                            size={podcast.size}
+                            content={podcast.content}
+                            audioUrl={podcast.audioUrl}
+                            imageUrl={podcast.imageUrl}
+                          />
+                        </motion.div>
+                      ))}
 
                     {/* Render NewPodcast only when not loading */}
                     {!isLoading && (
@@ -170,10 +154,11 @@ function App() {
               </>
             } />
 
-           <Route path={"/new_podcast"} element={<TempContainer />} />
-           <Route path={"/new_podcast2"} element={<PodcastGenerator />} />
-           <Route path={"/img"} element={<ImageGenerator />} />
-       
+          <Route path={"/new_podcast"} element={<TempContainer />} />
+          <Route path={"/new_podcast2"} element={<PodcastGenerator />} />
+          <Route path={"/img"} element={<ImageGenerator />} />
+          <Route path={"/upload"} element={<UploadPodcast />} />
+
 
           <Route path={"/new_podcast"} element={<TempContainer />} />
         </Routes>

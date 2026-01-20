@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import Footer from "../Footer";
 import React, { useEffect, useState } from 'react';
 import OpenAI from 'openai';
-import axios from 'axios';
+import { uploadFile } from '../../services/storage';
+import { addDocument } from '../../services/db';
 
 import Intro from "../../assets/audios/Intro.wav"
 import Outro from "../../assets/audios/Outro.wav"
@@ -174,7 +175,7 @@ async function generatePodcastImage(imagePrompt) {
 }
 
 function TempContainer() {
-  const [selectedOption, setSelectedOption] = useState("خيارات");
+  const [selectedOption, setSelectedOption] = useState("Options");
 
   // Function to handle the change in selected option
   const handleDropdownSelection = (event) => {
@@ -193,12 +194,12 @@ function TempContainer() {
   const [guestVoice, setGuestVoice] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
   const [loadingImage, setLoadingImage] = useState(false);
-  const [loading , setLoading] = useState(false);
-  const [transscriptFininshed , setTranscriptFinished] = useState(false);
-  const [audioFinished , setAudioFinished] = useState(false);
-  const [imageFinished , setImageFinished] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [transscriptFininshed, setTranscriptFinished] = useState(false);
+  const [audioFinished, setAudioFinished] = useState(false);
+  const [imageFinished, setImageFinished] = useState(false);
 
-  const [loadingMsg , setLoadingMsg] = useState("")
+  const [loadingMsg, setLoadingMsg] = useState("")
 
   // Generate transcript and select voices
   const handleGenerateTranscript = async (e) => {
@@ -207,52 +208,52 @@ function TempContainer() {
     setCombinedAudioUrl(null);
     setJsonUrl(null);
     setLoading(true);
-    setLoadingMsg("... جاري توليد المحتوى ");
+    setLoadingMsg("... Generating Content ");
     try {
       console.log("Started Transscript");
-      
-     
+
+
       const generatedTranscript = await generatePodcastTranscript(topic, category);
       setTranscript(generatedTranscript);
       handleGenerateAudio(generatedTranscript, getVoiceForRole('host'), getVoiceForRole('guest'));
 
-     
+
       setHostVoice(getVoiceForRole('host'));  // Assign voice based on role
       setGuestVoice(getVoiceForRole('guest'));  // Assign voice based on role
-      
+
     } catch (error) {
       console.error('Error generating transcript:', error);
-     
+
       setLoading(false);
     }
     setLoadingTranscript(false);
     setTranscriptFinished(true);
   };
 
-  
+
   // Generate audio from transcript
-  const handleGenerateAudio = async (generatedTranscript , hostVoice , guestVoice) => {
+  const handleGenerateAudio = async (generatedTranscript, hostVoice, guestVoice) => {
     if (!generatedTranscript) {
       console.log("Recjected");
       return;
     }
     setLoadingAudio(true);
     setLoading(true);
-    setLoadingMsg("... جاري توليد الصوتيات ");
+    setLoadingMsg("... Generating Audio ");
     try {
       console.log("Started Audio");
-      
+
       const lines = generatedTranscript.split('\n').filter(line => line.trim() !== '');
       const audioBuffers = [];
       const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-  
+
       // Load Intro and Outro Audio
       const introBuffer = await loadAudioFile(Intro, audioContext);
       const outroBuffer = await loadAudioFile(Outro, audioContext);
-  
+
       // Add Intro to the audioBuffers array
       audioBuffers.push(introBuffer);
-  
+
       // Process each line of the transcript
       for (const line of lines) {
         let speaker = 'host';
@@ -268,36 +269,36 @@ function TempContainer() {
         if (!/[.!?]$/.test(text)) text += '.';
         const chosenVoice = (speaker === 'host') ? hostVoice : guestVoice;
         console.log(`Generating audio for ${speaker} (voice: ${chosenVoice}): "${text}"`);
-  
+
         const arrayBuffer = await generateLineAudio(text, chosenVoice);
         const decodedBuffer = await audioContext.decodeAudioData(arrayBuffer.slice(0));
-  
+
         // Add a small "breathing" pause (e.g., 500ms of silence)
         const silenceDuration = 1;  // 1500ms pause
         const silenceBuffer = audioContext.createBuffer(decodedBuffer.numberOfChannels, silenceDuration * decodedBuffer.sampleRate, decodedBuffer.sampleRate);
-  
+
         // Combine the speech and silence (breath)
         audioBuffers.push(decodedBuffer, silenceBuffer);
       }
-  
+
       // Add Outro to the audioBuffers array
       audioBuffers.push(outroBuffer);
-  
+
       // Combine all audio buffers (Intro + Transcript + Outro)
       const combinedBuffer = await combineAudioBuffers(audioBuffers);
       const wavBlob = audioBufferToWav(combinedBuffer);
       setCombinedAudioUrl(URL.createObjectURL(wavBlob));
     } catch (error) {
       console.error('Error generating audio:', error);
-      
+
       setLoading(false);
-    
+
     }
     setLoadingAudio(false);
     setAudioFinished(true);
     handleGenerateImage();
   };
-    // Helper function to load audio file and decode it
+  // Helper function to load audio file and decode it
   const loadAudioFile = async (filePath, audioContext) => {
     const response = await fetch(filePath);
     const arrayBuffer = await response.arrayBuffer();
@@ -307,11 +308,11 @@ function TempContainer() {
   const handleGenerateImage = async () => {
     if (!topic) return;
     setLoadingImage(true);
-    
+
 
     try {
       setLoading(true);
-      setLoadingMsg("...جاري اضافة اللمسات الاخيرة ");
+      setLoadingMsg("... Finalizing ");
 
       const imgPrompt = await generateImagePrompt(topic);
       console.log("Generated image prompt:", imgPrompt);
@@ -323,66 +324,74 @@ function TempContainer() {
     }
     setLoadingImage(false);
     setImageFinished(true);
-   
+
   };
 
   const handleSendToBackend = async () => {
     try {
       setLoading(true);
-      setLoadingMsg("...جاري حفظ البودكاست");
+      setLoadingMsg("... Saving Podcast");
 
-      const formData = new FormData();
-      formData.append('Subject', topic);
-      formData.append('Size', category);
-      formData.append('Content', transcript);
-      formData.append('IsPublic', 'true');
-      
-      // For audio file, fetch the blob from the URL
+      // 1. Upload Audio
+      let uploadedAudioUrl = null;
       if (combinedAudioUrl) {
         const audioResp = await fetch(combinedAudioUrl);
         const audioBlob = await audioResp.blob();
-        formData.append('Audio', audioBlob, 'podcast.wav');
+        const audioFilename = `podcast_${Date.now()}.wav`;
+        uploadedAudioUrl = await uploadFile(audioBlob, audioFilename);
       }
-      
-      if (imageUrl) {
-        
-        formData.append('Image', imageUrl); 
 
-      }
-  
-      const response = await axios.post(
-        'https://podcastai.somee.com/api/podcast/podcast-details',
-        formData,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
+      // 2. Upload Image
+      let uploadedImageUrl = null;
+      if (imageUrl) {
+        try {
+          const imageResp = await fetch(imageUrl);
+          const imageBlob = await imageResp.blob();
+          const imageFilename = `cover_${Date.now()}.png`;
+          uploadedImageUrl = await uploadFile(imageBlob, imageFilename);
+        } catch (imgError) {
+          console.error("Error fetching/uploading image:", imgError);
+          // Fallback to original URL if upload fails (though DALL-E URLs expire)
+          uploadedImageUrl = imageUrl;
         }
-      );
-      console.log('Podcast submitted successfully!', response.data);
-      
+      }
+
+      // 3. Save Metadata to Firestore
+      const podcastData = {
+        topic,
+        category,
+        transcript,
+        audioUrl: uploadedAudioUrl,
+        imageUrl: uploadedImageUrl,
+        isPublic: true,
+      };
+
+      await addDocument("podcasts", podcastData);
+
+      console.log('Podcast submitted successfully to Firebase!');
+      alert('Podcast submitted successfully!');
+
     } catch (error) {
       console.error('Error submitting podcast:', error);
-     
+      alert('Failed to submit podcast.');
     }
     setLoading(false);
-
   };
 
 
-  useEffect(() =>{
-    if(audioFinished === true && transscriptFininshed === true && imageFinished === true){
-        if(combinedAudioUrl != null && imageUrl != null && transcript != ""){
-          handleSendToBackend();
-          setAudioFinished(false);
-          setTranscriptFinished(false);
-          setImageFinished(false);
-        }
+  useEffect(() => {
+    if (audioFinished === true && transscriptFininshed === true && imageFinished === true) {
+      if (combinedAudioUrl != null && imageUrl != null && transcript != "") {
+        handleSendToBackend();
+        setAudioFinished(false);
+        setTranscriptFinished(false);
+        setImageFinished(false);
+      }
     }
-  }, [audioFinished , transscriptFininshed , imageFinished])
+  }, [audioFinished, transscriptFininshed, imageFinished])
   return (
     <>
-      <nav dir="rtl">
+      <nav>
         <div className="flex items-center p-0 m-0 justify-around">
           <div className="flex items-center justify-center">
             <Link to={"/"}>
@@ -395,38 +404,38 @@ function TempContainer() {
               to={"/"}
               className="mx-2 text-[var(--text-color)] border-b-2 border-purple-600"
             >
-              الرئيسية
+              Home
             </Link>
             <Link
               to={"/"}
               className="mx-2 text-[var(--text-color)] border-b-2 border-transparent hover:text-gray-100 hover:border-purple-600 sm:mx-6"
             >
-              بودكاستات منشئة
+              Generated Podcasts
             </Link>
             <Link
               to={"/"}
               className="mx-2 text-[var(--text-color)] border-b-2 border-transparent hover:text-gray-100 hover:border-purple-600 sm:mx-6"
             >
-              فريق العمل
+              Team
             </Link>
             <Link
               to={"/"}
               className="mx-2 text-[var(--text-color)] border-b-2 border-transparent hover:text-gray-100 hover:border-purple-600 sm:mx-6"
             >
-              معلومات التواصل
+              Contact Info
             </Link>
           </div>
         </div>
       </nav>
-      
+
       <div className="text-[#999] flex flex-col items-center">
         <div className="container mx-auto h-96 flex flex-col md:flex-row  mt-10 ">
-        
+
           <div className="w-full h-full ms-32">
             <GeneratedPodcast topic={topic} audio={combinedAudioUrl} image={imageUrl} loading={loading} loadingMsg={loadingMsg} />
 
           </div>
-          
+
           {/* Left Panel - Controls */}
           <div className=" md:py-24 me-32 rounded-lg w-full md:w-3/3 text-left transition duration-200 ">
             <div className="flex items-center gap-3 justify-end">
@@ -437,25 +446,24 @@ function TempContainer() {
                   onChange={(e) => setCategory(e.target.value)}
                   className="block w-full  bg-[var(--bg-color)] text-[var(--text-color)] border-2 border-gray-500 rounded-md px-3 py-2 focus:outline-none"
                 >
-                  
-                  <option value="short">قصير</option>
-                  <option value="medium">متوسط</option>
-                  <option value="large">طويل</option>
+
+                  <option value="short">Short</option>
+                  <option value="medium">Medium</option>
+                  <option value="large">Long</option>
                 </select>
               </div>
 
               <input
-                dir="rtl"
                 type="text"
                 value={topic}
                 onChange={(e) => setTopic(e.target.value)}
                 className="bg-[#555] p-2 w-full rounded-xl border-2 border-gray-500 transition duration-200 focus:border-white focus:outline-none bg-[var(--bg-color)] text-gray-300"
-                placeholder="اكتب الموضوع هنا. . . . ."
+                placeholder="Write the topic here......"
               />
             </div>
             <div className="flex flex-col gap-3 mt-10">
               <button disabled={loading} onClick={handleGenerateTranscript} className="bg-[var(--primary-color)] font-bold text-[var(--text-color)] px-12 transition duration-300 py-3 rounded-xl mb-5 mx-12 ">
-                أنشئ بودكاست
+                Create Podcast
               </button>
               <div className="flex gap-6 justify-center items-center">
                 {/* <a  href={jsonUrl} download="transcript.pdf" >
@@ -469,13 +477,13 @@ function TempContainer() {
 
                 </a> */}
 
-                 <a  href={combinedAudioUrl} download="podcast.wav " className="flex ">
+                <a href={combinedAudioUrl} download="podcast.wav " className="flex ">
                   <button disabled={loading} className="bg-[var(--bg-color)] border-2 px-10 py-2 flex items-center transition duration-200 rounded-2xl text-[var(--text-color)] border-[#444] hover:bg-[#222]">
-                  تنزيل الصوت  
-                  
-                  <svg className="size-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" >
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 18.75a6 6 0 0 0 6-6v-1.5m-6 7.5a6 6 0 0 1-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 0 1-3-3V4.5a3 3 0 1 1 6 0v8.25a3 3 0 0 1-3 3Z" />
-                  </svg>
+                    Download Audio
+
+                    <svg className="size-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" >
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 18.75a6 6 0 0 0 6-6v-1.5m-6 7.5a6 6 0 0 1-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 0 1-3-3V4.5a3 3 0 1 1 6 0v8.25a3 3 0 0 1-3 3Z" />
+                    </svg>
                   </button>
                 </a>
 
