@@ -37,12 +37,6 @@ const Header = () => {
     <header className="bg-[var(--bg-color)] text-[var(--text-color)]">
       <nav className="">
         <div className=" flex  items-center p-0 m-0 justify-around">
-          <div className="flex items-center justify-center">
-            <div className="flex items-center justify-between gap-1"></div>
-            <Link to={"/"} className="">
-              <img className="w-auto h-28" src={logo} alt="Logo" />
-            </Link>
-          </div>
 
           <div className="flex items-center justify-center  text-gray-600 capitalize ">
             <a
@@ -70,6 +64,14 @@ const Header = () => {
               Contact Info
             </a>
           </div>
+
+          <div className="flex items-center justify-center">
+            <div className="flex items-center justify-between gap-1"></div>
+            <Link to={"/"} className="">
+              <img className="w-auto h-28" src={logo} alt="Logo" />
+            </Link>
+          </div>
+
         </div>
       </nav>
 
